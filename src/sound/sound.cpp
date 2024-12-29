@@ -18,7 +18,7 @@ uint16_t I2SSound::sampleRate() const { return RECORDING_SAMPLE_RATE; }
 
 uint8_t I2SSound::bitPerSample() const { return RECORDING_BITS_PER_SAMPLE; }
 
-uint8_t I2SSound::channelsOfSpeaker() const { return 1; }
+uint8_t I2SSound::channelsOfSpeaker() const { return 2; }
 
 void I2SSound::mute() const { digitalWrite(SPEAKER_MUTE_PIN, LOW); }
 
@@ -28,8 +28,8 @@ const float_t MAX_AMPLITUDE = 32767;
 void I2SSound::buzz(const float_t frequency, const float_t duration,
                     const uint8_t volume, const boolean wait) const {
   const int samples = sampleRate() * duration;
-  const uint16_t bufferSize = samples * sizeof(int16_t) * 2;
-  int16_t* buffer = (int16_t*)ps_malloc(bufferSize);
+  const uint16_t bufferSize = samples * sizeof(int16_t) * channelsOfSpeaker();
+  int16_t buffer[bufferSize / sizeof(int16_t)];
   const float_t amplitude = MAX_AMPLITUDE * volume / 100;
 
   for (int i = 0; i < samples; i++) {
@@ -40,8 +40,6 @@ void I2SSound::buzz(const float_t frequency, const float_t duration,
   }
 
   write(buffer, bufferSize, wait);
-
-  free(buffer);
 }
 
 void I2SSound::playSystemSound(const SystemSound sound, const uint8_t volume,
