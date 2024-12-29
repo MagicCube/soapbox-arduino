@@ -11,6 +11,13 @@
     "vector": "cpp",
     "string_view": "cpp",
     "initializer_list": "cpp",
-    "span": "cpp"
+    "span": "cpp",
+    "compare": "cpp",
+    "functional": "cpp",
+    "ratio": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "utility": "cpp",
+    "random": "cpp"
   }
 }
