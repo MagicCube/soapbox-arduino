@@ -23,9 +23,11 @@ void setup() {
   Sound.begin();
   lv_setup();
 
+  Sound.playSystemSound(SYSTEM_SOUND_WELCOME);
+
   lv_init_ui();
 
-  setupWiFi();
+  // setupWiFi();
 }
 
 time_t lastPrintTime = 0;
