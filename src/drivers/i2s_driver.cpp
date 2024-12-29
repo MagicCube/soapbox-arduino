@@ -9,7 +9,8 @@ void i2s_init_speaker() {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
       .sample_rate = RECORDING_SAMPLE_RATE,
       .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
-      .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
+      .channel_format = SPEAKER_CHANNELS == 2 ? I2S_CHANNEL_FMT_RIGHT_LEFT
+                                              : I2S_CHANNEL_FMT_ONLY_LEFT,
       .communication_format = I2S_COMM_FORMAT_STAND_I2S,
       .intr_alloc_flags = 0,
       .dma_buf_count = 8,

@@ -7,6 +7,7 @@
 
 // I2S
 #define SPEAKER_I2S_PORT I2S_NUM_0
+#define SPEAKER_CHANNELS 1
 #define MIC_I2S_PORT I2S_NUM_1
 
 // Pins

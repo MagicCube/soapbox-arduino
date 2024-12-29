@@ -16,7 +16,7 @@ class I2SSound {
 
   uint16_t sampleRate() const;
   uint8_t bitPerSample() const;
-  uint8_t channelsOfSpeaker() const;
+  uint8_t speakerChannels() const;
 
   void mute() const;
 
