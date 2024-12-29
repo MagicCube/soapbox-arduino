@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include <lvgl.h>
 
+#include "hardwares/sound.h"
 #include "lv_setup.h"
+#include "wifi_setup.h"
 
 void lv_init_ui() {
   // Add a button labeled 'Record' in the center of the screen. The size is fit
@@ -20,9 +22,12 @@ void setup() {
   Serial.begin(115200);
   Display.begin();
   Display.rotate(180);
-
+  Sound.begin();
   lv_setup();
+
   lv_init_ui();
+
+  setupWiFi();
 }
 
 time_t lastPrintTime = 0;

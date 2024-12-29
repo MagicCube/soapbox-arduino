@@ -5,6 +5,10 @@
 #define DISPLAY_RES_HEIGHT 360
 #define DISPLAY_COLOR_BITS 16
 
+// I2S
+#define SPEAKER_I2S_PORT I2S_NUM_0
+#define MIC_I2S_PORT I2S_NUM_1
+
 // Pins
 #define TFT_BLK 15
 #define TFT_RST 47
@@ -27,11 +31,11 @@
 #define SD_MMC_CLK_PIN 3
 #define SD_MMC_CMD_PIN 4
 
-#define AUDIO_I2S_MCK_IO -1  // MCK
-#define AUDIO_I2S_BCK_IO 18  // BCK
-#define AUDIO_I2S_WS_IO 16   // LCK
-#define AUDIO_I2S_DO_IO 17   // DIN
-#define AUDIO_MUTE_PIN 48    // 低电平静音
+#define SPEAKER_I2S_MCK_IO -1  // MCK
+#define SPEAKER_I2S_BCK_IO 18  // BCK
+#define SPEAKER_I2S_WS_IO 16   // LCK
+#define SPEAKER_I2S_DO_IO 17   // DIN
+#define SPEAKER_MUTE_PIN 48    // 低电平静音
 
 #define MIC_I2S_WS 45
 #define MIC_I2S_SD 46
