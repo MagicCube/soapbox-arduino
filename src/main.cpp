@@ -1,13 +1,11 @@
 #include <Arduino.h>
 #include <lvgl.h>
 
-#include "hardwares/sound.h"
 #include "lv_setup.h"
+#include "sound/sound.h"
 #include "wifi_setup.h"
 
 void lv_init_ui() {
-  // Add a button labeled 'Record' in the center of the screen. The size is fit
-  // to the content.
   lv_obj_t *btn = lv_btn_create(lv_scr_act());
   lv_obj_set_size(btn, Display.width() / 2, Display.height() / 2);
   lv_obj_set_style_radius(btn, LV_RADIUS_CIRCLE, LV_PART_MAIN);

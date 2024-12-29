@@ -3,7 +3,7 @@
 #include <lvgl.h>
 
 #include "device_conf.h"
-#include "hardwares/touch_lcd_display.h"
+#include "display/touch_lcd_display.h"
 
 #define DRAW_BUFFER_SIZE \
   (DISPLAY_RES_WIDTH * DISPLAY_RES_HEIGHT * (LV_COLOR_DEPTH / 8) / 10 / 4)
