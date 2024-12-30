@@ -1,31 +1,31 @@
-#include "sound.h"
+#include "audio.h"
 
 #include <Arduino.h>
 
 #include "device_conf.h"
 #include "drivers/i2s_driver.h"
 
-I2SSound Sound;
+I2SAudio Audio;
 
-void I2SSound::begin() {
+void I2SAudio::begin() {
   pinMode(SPEAKER_MUTE_PIN, OUTPUT);
   i2s_init_speaker();
   i2s_init_mic();
   unmute();
 }
 
-uint16_t I2SSound::sampleRate() const { return RECORDING_SAMPLE_RATE; }
+uint16_t I2SAudio::sampleRate() const { return RECORDING_SAMPLE_RATE; }
 
-uint8_t I2SSound::bitPerSample() const { return RECORDING_BITS_PER_SAMPLE; }
+uint8_t I2SAudio::bitPerSample() const { return RECORDING_BITS_PER_SAMPLE; }
 
-uint8_t I2SSound::speakerChannels() const { return SPEAKER_CHANNELS; }
+uint8_t I2SAudio::speakerChannels() const { return SPEAKER_CHANNELS; }
 
-void I2SSound::mute() const { digitalWrite(SPEAKER_MUTE_PIN, LOW); }
+void I2SAudio::mute() const { digitalWrite(SPEAKER_MUTE_PIN, LOW); }
 
-void I2SSound::unmute() const { digitalWrite(SPEAKER_MUTE_PIN, HIGH); }
+void I2SAudio::unmute() const { digitalWrite(SPEAKER_MUTE_PIN, HIGH); }
 
 const float_t MAX_AMPLITUDE = 32767;
-void I2SSound::buzz(const float_t frequency, const float_t duration,
+void I2SAudio::buzz(const float_t frequency, const float_t duration,
                     const uint8_t volume, const boolean wait) const {
   const int samples = sampleRate() * duration;
   const uint16_t bufferSize = samples * sizeof(int16_t) * speakerChannels();
@@ -46,7 +46,7 @@ void I2SSound::buzz(const float_t frequency, const float_t duration,
   write(buffer, bufferSize, wait);
 }
 
-void I2SSound::playSystemSound(const SystemSound sound, const uint8_t volume,
+void I2SAudio::playSystemSound(const SystemSound sound, const uint8_t volume,
                                const boolean wait) const {
   switch (sound) {
     case SYSTEM_SOUND_SINGLE_BEEP:
@@ -60,10 +60,10 @@ void I2SSound::playSystemSound(const SystemSound sound, const uint8_t volume,
       break;
 
     case SYSTEM_SOUND_WELCOME:
-      buzz(NOTE_MI * 7, 0.09, volume, wait);
-      buzz(NOTE_DO * 7, 0.09, volume, wait);
-      buzz(NOTE_RE * 7, 0.09, volume, wait);
-      buzz(NOTE_SO * 7, 0.09, volume, wait);
+      buzz(NOTE_MI * 7, 0.1, volume, wait);
+      buzz(NOTE_DO * 7, 0.1, volume, wait);
+      buzz(NOTE_RE * 7, 0.1, volume, wait);
+      buzz(NOTE_SO * 7, 0.1, volume, wait);
       break;
 
     default:
@@ -71,7 +71,7 @@ void I2SSound::playSystemSound(const SystemSound sound, const uint8_t volume,
   }
 }
 
-size_t I2SSound::write(int16_t* buffer, size_t bufferSize, bool wait) const {
+size_t I2SAudio::write(int16_t* buffer, size_t bufferSize, bool wait) const {
   size_t bytesWritten;
   i2s_write(SPEAKER_I2S_PORT, buffer, bufferSize, &bytesWritten,
             wait ? portMAX_DELAY : 0);

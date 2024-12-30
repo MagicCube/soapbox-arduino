@@ -10,7 +10,7 @@ enum SystemSound {
   SYSTEM_SOUND_WELCOME,
 };
 
-class I2SSound {
+class I2SAudio {
  public:
   void begin();
 
@@ -27,8 +27,8 @@ class I2SSound {
   void buzz(const float_t frequency, const float_t duration,
             const uint8_t volume = 100, bool wait = true) const;
 
-  void playSystemSound(const SystemSound sound, const uint8_t volume = 1,
+  void playSystemSound(const SystemSound sound, const uint8_t volume = 5,
                        bool wait = true) const;
 };
 
-extern I2SSound Sound;
+extern I2SAudio Audio;

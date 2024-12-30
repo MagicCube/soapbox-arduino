@@ -2,9 +2,9 @@
 #include <HTTPClient.h>
 #include <lvgl.h>
 
+#include "audio/audio.h"
 #include "setup/lv_setup.h"
 #include "setup/wifi_setup.h"
-#include "sound/sound.h"
 
 void lv_init_ui() {
   lv_obj_t *btn = lv_btn_create(lv_scr_act());
@@ -21,10 +21,10 @@ void setup() {
   Serial.begin(115200);
   Display.begin();
   Display.rotate(180);
-  Sound.begin();
+  Audio.begin();
   lv_setup();
 
-  Sound.playSystemSound(SYSTEM_SOUND_WELCOME);
+  Audio.playSystemSound(SYSTEM_SOUND_WELCOME);
 
   lv_init_ui();
 
@@ -45,7 +45,7 @@ void setup() {
             buffer, ((size > sizeof(buffer)) ? sizeof(buffer) : size));
         // 处理读取的数据
         Serial.printf("Read %d bytes\n", c);
-        Sound.write((int16_t *)buffer, c);
+        Audio.write((int16_t *)buffer, c);
       }
       delay(1);  // 避免 watchdog timer 触发
     }
