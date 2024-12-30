@@ -1,9 +1,10 @@
 #include <Arduino.h>
+#include <HTTPClient.h>
 #include <lvgl.h>
 
-#include "lv_setup.h"
+#include "setup/lv_setup.h"
+#include "setup/wifi_setup.h"
 #include "sound/sound.h"
-#include "wifi_setup.h"
 
 void lv_init_ui() {
   lv_obj_t *btn = lv_btn_create(lv_scr_act());
@@ -27,7 +28,31 @@ void setup() {
 
   lv_init_ui();
 
-  // setupWiFi();
+  setupWiFi();
+
+  HTTPClient http;
+  http.begin("https://soap.henry1943.top/speech.pcm");
+  http.addHeader("Host", "soap.henry1943.top");
+  int httpCode = http.GET();
+  if (httpCode == HTTP_CODE_OK) {
+    WiFiClient *stream = http.getStreamPtr();
+    uint8_t buffer[1024];
+
+    while (http.connected()) {
+      size_t size = stream->available();
+      if (size) {
+        int c = stream->readBytes(
+            buffer, ((size > sizeof(buffer)) ? sizeof(buffer) : size));
+        // 处理读取的数据
+        Serial.printf("Read %d bytes\n", c);
+        Sound.write((int16_t *)buffer, c);
+      }
+      delay(1);  // 避免 watchdog timer 触发
+    }
+  } else {
+    Serial.printf("GET request failed, error: %s\n",
+                  http.errorToString(httpCode).c_str());
+  }
 }
 
 time_t lastPrintTime = 0;
@@ -37,6 +62,13 @@ void keepSerialAlive() {
     // Print free memory
     Serial.print("Free memory: ");
     Serial.println(esp_get_free_heap_size());
+
+    // Serial.print("WiFi status: ");
+    // Serial.println(WiFi.status());
+
+    // Serial.print("WiFi IP: ");
+    // Serial.println(WiFi.localIP());
+
     lastPrintTime = millis();
   }
 }
