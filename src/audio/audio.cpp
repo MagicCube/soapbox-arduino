@@ -9,12 +9,6 @@ void I2SAudio::begin() {
   unmute();
 }
 
-uint16_t I2SAudio::sampleRate() const { return AUDIO_SAMPLE_RATE; }
-
-uint8_t I2SAudio::bitPerSample() const { return AUDIO_BITS_PER_SAMPLE; }
-
-uint8_t I2SAudio::speakerChannels() const { return AUDIO_CHANNELS; }
-
 void I2SAudio::mute() const { digitalWrite(SPEAKER_MUTE_PIN, LOW); }
 
 void I2SAudio::unmute() const { digitalWrite(SPEAKER_MUTE_PIN, HIGH); }
@@ -22,17 +16,17 @@ void I2SAudio::unmute() const { digitalWrite(SPEAKER_MUTE_PIN, HIGH); }
 const float_t MAX_AMPLITUDE = 32767;
 void I2SAudio::buzz(const float_t frequency, const float_t duration,
                     const uint8_t volume, const boolean wait) const {
-  const int samples = sampleRate() * duration;
-  const uint16_t bufferSize = samples * sizeof(int16_t) * speakerChannels();
+  const int samples = AUDIO_OUT_SAMPLE_RATE * duration;
+  const uint16_t bufferSize = samples * sizeof(int16_t) * AUDIO_OUT_CHANNELS;
   int16_t buffer[bufferSize / sizeof(int16_t)];
   const float_t amplitude = MAX_AMPLITUDE * volume / 100;
 
   for (int i = 0; i < samples; i++) {
-    int16_t pcmValue =
-        (int16_t)(amplitude * sin(2 * PI * frequency * i / sampleRate()));
-    if (speakerChannels() == 1) {
+    int16_t pcmValue = (int16_t)(amplitude * sin(2 * PI * frequency * i /
+                                                 AUDIO_OUT_SAMPLE_RATE));
+    if (AUDIO_OUT_CHANNELS == 1) {
       buffer[i] = pcmValue;
-    } else if (speakerChannels() == 2) {
+    } else if (AUDIO_OUT_CHANNELS == 2) {
       buffer[2 * i] = pcmValue;
       buffer[2 * i + 1] = pcmValue;
     }

@@ -15,10 +15,6 @@ class I2SAudio {
  public:
   void begin();
 
-  uint16_t sampleRate() const;
-  uint8_t bitPerSample() const;
-  uint8_t speakerChannels() const;
-
   void mute() const;
 
   void unmute() const;

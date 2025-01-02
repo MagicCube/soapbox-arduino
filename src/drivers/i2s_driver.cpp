@@ -3,10 +3,10 @@
 void i2s_init_speaker() {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
-      .sample_rate = AUDIO_SAMPLE_RATE,
+      .sample_rate = AUDIO_OUT_SAMPLE_RATE,
       .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
-      .channel_format = AUDIO_CHANNELS == 2 ? I2S_CHANNEL_FMT_RIGHT_LEFT
-                                            : I2S_CHANNEL_FMT_ONLY_LEFT,
+      .channel_format = AUDIO_OUT_CHANNELS == 2 ? I2S_CHANNEL_FMT_RIGHT_LEFT
+                                                : I2S_CHANNEL_FMT_ONLY_LEFT,
       .communication_format = I2S_COMM_FORMAT_STAND_I2S,
       .intr_alloc_flags = 0,
       .dma_buf_count = 8,
@@ -27,7 +27,7 @@ void i2s_init_speaker() {
 void i2s_init_mic() {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
-      .sample_rate = AUDIO_SAMPLE_RATE,
+      .sample_rate = AUDIO_IN_SAMPLE_RATE,
       .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
       .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
       .communication_format = I2S_COMM_FORMAT_STAND_I2S,
