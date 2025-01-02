@@ -1,10 +1,11 @@
 #include <Arduino.h>
 #include <HTTPClient.h>
+#include <WiFi.h>
 #include <lvgl.h>
 
 #include "audio/audio.h"
 #include "setup/lv_setup.h"
-#include "setup/wifi_setup.h"
+#include "wifi/wifi_connection.h"
 
 void lv_init_ui() {
   lv_obj_t *btn = lv_btn_create(lv_scr_act());
@@ -20,6 +21,8 @@ void lv_init_ui() {
 void setup() {
   Serial.begin(115200);
 
+  WiFiConnection.begin();
+
   Audio.begin();
   Audio.playSystemSound(SYSTEM_SOUND_WELCOME);
 
@@ -28,6 +31,8 @@ void setup() {
 
   lv_setup();
   lv_init_ui();
+
+  WiFiConnection.connect();
 }
 
 time_t lastPrintTime = 0;
@@ -38,11 +43,8 @@ void keepSerialAlive() {
     Serial.print("Free memory: ");
     Serial.println(esp_get_free_heap_size());
 
-    // Serial.print("WiFi status: ");
-    // Serial.println(WiFi.status());
-
-    // Serial.print("WiFi IP: ");
-    // Serial.println(WiFi.localIP());
+    Serial.print("WiFi IP: ");
+    Serial.println(WiFi.localIP());
 
     lastPrintTime = millis();
   }
@@ -56,4 +58,7 @@ void keepLVUpdate() {
 void loop() {
   keepSerialAlive();
   keepLVUpdate();
+  if (!WiFiConnection.isConnected()) {
+    WiFiConnection.connect();
+  }
 }
