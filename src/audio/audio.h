@@ -19,13 +19,12 @@ class I2SAudio {
 
   void unmute() const;
 
-  size_t write(int16_t* buffer, size_t bufferSize, bool wait = true) const;
+  size_t write(int16_t* data, size_t length) const;
 
   void buzz(const float_t frequency, const float_t duration,
-            const uint8_t volume = 100, bool wait = true) const;
+            const uint8_t volume = 100) const;
 
-  void playSystemSound(const SystemSound sound, const uint8_t volume = 5,
-                       bool wait = true) const;
+  void playSystemSound(const SystemSound sound, const uint8_t volume = 5) const;
 };
 
 extern I2SAudio Audio;
