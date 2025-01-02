@@ -4,7 +4,9 @@ void i2s_init_audio_out() {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
       .sample_rate = AUDIO_OUT_SAMPLE_RATE,
-      .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+      .bits_per_sample = AUDIO_OUT_BITS_PER_SAMPLE == 8
+                             ? I2S_BITS_PER_SAMPLE_8BIT
+                             : I2S_BITS_PER_SAMPLE_16BIT,
       .channel_format = AUDIO_OUT_CHANNELS == 2 ? I2S_CHANNEL_FMT_RIGHT_LEFT
                                                 : I2S_CHANNEL_FMT_ONLY_LEFT,
       .communication_format = I2S_COMM_FORMAT_STAND_I2S,
@@ -28,7 +30,9 @@ void i2s_init_audio_in() {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
       .sample_rate = AUDIO_IN_SAMPLE_RATE,
-      .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+      .bits_per_sample = AUDIO_IN_BITS_PER_SAMPLE == 8
+                             ? I2S_BITS_PER_SAMPLE_8BIT
+                             : I2S_BITS_PER_SAMPLE_16BIT,
       .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
       .communication_format = I2S_COMM_FORMAT_STAND_I2S,
       .intr_alloc_flags = 0,
