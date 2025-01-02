@@ -1,24 +1,17 @@
 #include <Arduino.h>
 #include <AsyncHTTPRequest_Generic.h>
 #include <HTTPClient.h>
-#include <WiFi.h>
 #include <lvgl.h>
+#include <mx.h>
 
 #include "audio/audio.h"
 #include "setup/lv_setup.h"
-#include "wifi/wifi_connection.h"
+// #include "wifi/wifi_connection.h"
 
 AsyncHTTPRequest httpRequest;
 
 void lv_init_ui() {
-  lv_obj_t *btn = lv_btn_create(lv_scr_act());
-  lv_obj_set_size(btn, Display.width() / 2, Display.height() / 2);
-  lv_obj_set_style_radius(btn, LV_RADIUS_CIRCLE, LV_PART_MAIN);
-  lv_obj_align(btn, LV_ALIGN_CENTER, 0, 0);
-  lv_obj_t *label = lv_label_create(btn);
-  lv_label_set_text(label, "Start");
-  lv_obj_set_style_text_font(label, &lv_font_montserrat_42, LV_PART_MAIN);
-  lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+  mx()->button("Record", FONT_SIZE_XL).center().text("Stop");
 }
 
 void setup() {
@@ -30,8 +23,8 @@ void setup() {
   Display.begin();
   Display.rotate(180);
 
-  WiFiConnection.begin();
-  WiFiConnection.connect();
+  // WiFiConnection.begin();
+  // WiFiConnection.connect();
 
   lv_setup();
   lv_init_ui();
@@ -57,14 +50,14 @@ void keepLVUpdate() {
   delay(5);
 }
 
-void keepWiFiConnected() {
-  if (!WiFiConnection.isConnected()) {
-    WiFiConnection.connect();
-  }
-}
+// void keepWiFiConnected() {
+//   if (!WiFiConnection.isConnected()) {
+//     WiFiConnection.connect();
+//   }
+// }
 
 void loop() {
   keepSerialAlive();
   keepLVUpdate();
-  keepWiFiConnected();
+  // keepWiFiConnected();
 }
