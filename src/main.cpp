@@ -24,18 +24,17 @@ void lv_init_ui() {
 void setup() {
   Serial.begin(115200);
 
-  WiFiConnection.begin();
-
   Audio.begin();
   Audio.playSystemSound(SYSTEM_SOUND_WELCOME);
 
   Display.begin();
   Display.rotate(180);
 
+  WiFiConnection.begin();
+  WiFiConnection.connect();
+
   lv_setup();
   lv_init_ui();
-
-  WiFiConnection.connect();
 }
 
 time_t lastPrintTime = 0;
