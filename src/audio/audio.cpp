@@ -1,10 +1,5 @@
 #include "audio.h"
 
-#include <Arduino.h>
-
-#include "device_conf.h"
-#include "drivers/i2s_driver.h"
-
 I2SAudio Audio;
 
 void I2SAudio::begin() {
@@ -14,11 +9,11 @@ void I2SAudio::begin() {
   unmute();
 }
 
-uint16_t I2SAudio::sampleRate() const { return RECORDING_SAMPLE_RATE; }
+uint16_t I2SAudio::sampleRate() const { return AUDIO_SAMPLE_RATE; }
 
-uint8_t I2SAudio::bitPerSample() const { return RECORDING_BITS_PER_SAMPLE; }
+uint8_t I2SAudio::bitPerSample() const { return AUDIO_BITS_PER_SAMPLE; }
 
-uint8_t I2SAudio::speakerChannels() const { return SPEAKER_CHANNELS; }
+uint8_t I2SAudio::speakerChannels() const { return AUDIO_CHANNELS; }
 
 void I2SAudio::mute() const { digitalWrite(SPEAKER_MUTE_PIN, LOW); }
 
@@ -73,7 +68,7 @@ void I2SAudio::playSystemSound(const SystemSound sound, const uint8_t volume,
 
 size_t I2SAudio::write(int16_t* buffer, size_t bufferSize, bool wait) const {
   size_t bytesWritten;
-  i2s_write(SPEAKER_I2S_PORT, buffer, bufferSize, &bytesWritten,
+  i2s_write(AUDIO_OUT, buffer, bufferSize, &bytesWritten,
             wait ? portMAX_DELAY : 0);
   return bytesWritten;
 }

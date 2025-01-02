@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 
+#include "drivers/i2s_driver.h"
 #include "notes.h"
 
 enum SystemSound {

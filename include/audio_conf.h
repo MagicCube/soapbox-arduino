@@ -1,0 +1,8 @@
+#pragma once
+
+#define AUDIO_CHANNELS 1
+#define AUDIO_SAMPLE_RATE 8000
+#define AUDIO_BITS_PER_SAMPLE 16
+
+#define AUDIO_IN I2S_NUM_1
+#define AUDIO_OUT I2S_NUM_0

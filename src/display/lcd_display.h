@@ -4,6 +4,9 @@
 #include <ESP_IOExpander.h>
 #include <ESP_Panel_Library.h>
 
+#include "drivers/cst816s_touch_driver.h"
+#include "drivers/st77916_display_driver.h"
+
 class LCDDisplay {
  public:
   void begin();

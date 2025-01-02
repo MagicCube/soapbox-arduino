@@ -1,0 +1,5 @@
+#pragma once
+
+#define DISPLAY_COLOR_BITS 16
+#define DISPLAY_RES_WIDTH 360
+#define DISPLAY_RES_HEIGHT 360

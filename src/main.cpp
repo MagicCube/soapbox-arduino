@@ -29,30 +29,6 @@ void setup() {
   lv_init_ui();
 
   setupWiFi();
-
-  HTTPClient http;
-  http.begin("https://soap.henry1943.top/speech.pcm");
-  http.addHeader("Host", "soap.henry1943.top");
-  int httpCode = http.GET();
-  if (httpCode == HTTP_CODE_OK) {
-    WiFiClient *stream = http.getStreamPtr();
-    uint8_t buffer[1024];
-
-    while (http.connected()) {
-      size_t size = stream->available();
-      if (size) {
-        int c = stream->readBytes(
-            buffer, ((size > sizeof(buffer)) ? sizeof(buffer) : size));
-        // 处理读取的数据
-        Serial.printf("Read %d bytes\n", c);
-        Audio.write((int16_t *)buffer, c);
-      }
-      delay(1);  // 避免 watchdog timer 触发
-    }
-  } else {
-    Serial.printf("GET request failed, error: %s\n",
-                  http.errorToString(httpCode).c_str());
-  }
 }
 
 time_t lastPrintTime = 0;

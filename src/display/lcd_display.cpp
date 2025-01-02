@@ -1,9 +1,5 @@
 #include "lcd_display.h"
 
-#include "device_conf.h"
-#include "drivers/cst816s_touch_driver.h"
-#include "drivers/st77916_display_driver.h"
-
 void LCDDisplay::begin() {
   lcd = st77916_init_lcd();
   backlight = st77916_init_backlight();

@@ -1,7 +1,5 @@
 #include "touch_lcd_display.h"
 
-#include "drivers/cst816s_touch_driver.h"
-
 void TouchLCDDisplay::begin() {
   LCDDisplay::begin();
 
