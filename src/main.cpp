@@ -19,16 +19,15 @@ void lv_init_ui() {
 
 void setup() {
   Serial.begin(115200);
-  Display.begin();
-  Display.rotate(180);
-  Audio.begin();
-  lv_setup();
 
+  Audio.begin();
   Audio.playSystemSound(SYSTEM_SOUND_WELCOME);
 
-  lv_init_ui();
+  Display.begin();
+  Display.rotate(180);
 
-  setupWiFi();
+  lv_setup();
+  lv_init_ui();
 }
 
 time_t lastPrintTime = 0;
