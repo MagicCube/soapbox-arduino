@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <AsyncHTTPRequest_Generic.h>
 #include <HTTPClient.h>
 #include <WiFi.h>
 #include <lvgl.h>
@@ -6,6 +7,8 @@
 #include "audio/audio.h"
 #include "setup/lv_setup.h"
 #include "wifi/wifi_connection.h"
+
+AsyncHTTPRequest httpRequest;
 
 void lv_init_ui() {
   lv_obj_t *btn = lv_btn_create(lv_scr_act());
@@ -43,8 +46,8 @@ void keepSerialAlive() {
     Serial.print("Free memory: ");
     Serial.println(esp_get_free_heap_size());
 
-    Serial.print("WiFi IP: ");
-    Serial.println(WiFi.localIP());
+    // Serial.print("WiFi IP: ");
+    // Serial.println(WiFi.localIP());
 
     lastPrintTime = millis();
   }
@@ -55,10 +58,14 @@ void keepLVUpdate() {
   delay(5);
 }
 
-void loop() {
-  keepSerialAlive();
-  keepLVUpdate();
+void keepWiFiConnected() {
   if (!WiFiConnection.isConnected()) {
     WiFiConnection.connect();
   }
+}
+
+void loop() {
+  keepSerialAlive();
+  keepLVUpdate();
+  keepWiFiConnected();
 }
