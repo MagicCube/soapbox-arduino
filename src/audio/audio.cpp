@@ -4,8 +4,8 @@ I2SAudio Audio;
 
 void I2SAudio::begin() {
   pinMode(SPEAKER_MUTE_PIN, OUTPUT);
-  i2s_init_speaker();
-  i2s_init_mic();
+  i2s_init_audio_out();
+  i2s_init_audio_in();
   unmute();
 }
 

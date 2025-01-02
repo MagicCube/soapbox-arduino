@@ -5,5 +5,5 @@
 
 #include "device_conf.h"
 
-void i2s_init_speaker();
-void i2s_init_mic();
+void i2s_init_audio_in();
+void i2s_init_audio_out();

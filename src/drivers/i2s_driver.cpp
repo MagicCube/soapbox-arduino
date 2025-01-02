@@ -1,6 +1,6 @@
 #include "i2s_driver.h"
 
-void i2s_init_speaker() {
+void i2s_init_audio_out() {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
       .sample_rate = AUDIO_OUT_SAMPLE_RATE,
@@ -24,7 +24,7 @@ void i2s_init_speaker() {
   i2s_set_pin(AUDIO_OUT, &pin_config);
 }
 
-void i2s_init_mic() {
+void i2s_init_audio_in() {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
       .sample_rate = AUDIO_IN_SAMPLE_RATE,
