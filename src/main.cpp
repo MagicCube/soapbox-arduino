@@ -6,10 +6,9 @@
 
 #include "audio/audio.h"
 #include "setup/lv_setup.h"
-#include "wifi/wifi_connection.h"
 
 // Scenes
-#include "ui/scenes/WiFiConnectionScene.h"
+#include "ui/scenes/wifi_connection_scene.h"
 
 WiFiConnectionScene wifiConnectionScene;
 
@@ -29,8 +28,6 @@ void setup() {
 
   lv_setup();
   lv_init_ui();
-
-  WiFiConnection.begin();
 }
 
 time_t lastPrintTime = 0;
@@ -45,6 +42,12 @@ void keepSerialAlive() {
   }
 }
 
+void keepUIUpdate() {
+  if (MXScene::activeScene()) {
+    MXScene::activeScene()->update();
+  }
+}
+
 void keepLVUpdate() {
   lv_timer_handler();
   delay(5);
@@ -52,9 +55,6 @@ void keepLVUpdate() {
 
 void loop() {
   keepSerialAlive();
+  keepUIUpdate();
   keepLVUpdate();
-
-  if (MXScene::activeScene()) {
-    MXScene::activeScene()->update();
-  }
 }

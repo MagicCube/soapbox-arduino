@@ -1,3 +1,5 @@
+#pragma once
+
 #include <mx.h>
 
 #include "wifi/wifi_connection.h"
@@ -8,15 +10,18 @@ class WiFiConnectionScene : public MXScene {
 
   inline void onInit() override {
     MXScene::onInit();
-    root()->bg(mx_theme_color_primary());
-    _label =
-        &mx(this)->label("Connecting to WiFi...", MX_FONT_SIZE_XL).center();
+    _label = &root()->label("Connecting to WiFi...", MX_FONT_SIZE_XL).center();
   }
 
   inline void dispose() override {
     MXScene::dispose();
     delete _label;
     _label = nullptr;
+  }
+
+  inline void onShown() override {
+    MXScene::onShown();
+    WiFiConnection.begin();
   }
 
   bool _firstUpdate = true;
