@@ -8,8 +8,10 @@
 #include "setup/lv_setup.h"
 
 // Scenes
+#include "ui/scenes/main_scene.h"
 #include "ui/scenes/wifi_connection_scene.h"
 
+MainScene mainScene;
 WiFiConnectionScene wifiConnectionScene;
 
 void lv_init_ui() {
@@ -45,6 +47,11 @@ void keepSerialAlive() {
 void keepUIUpdate() {
   if (MXScene::activeScene()) {
     MXScene::activeScene()->update();
+  }
+  if (WiFiConnection.isConnected() &&
+      MXScene::activeScene() == &wifiConnectionScene) {
+    mainScene.begin();
+    mainScene.show();
   }
 }
 
