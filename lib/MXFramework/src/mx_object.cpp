@@ -125,6 +125,11 @@ MXObject& MXObject::border_none() {
 
 MXObject& MXObject::bg(const lv_color_t color, const float opacity) {
   lv_obj_set_style_bg_color(lv_obj, color, LV_PART_MAIN);
+  bg_opacity(opacity);
+  return *this;
+}
+
+MXObject& MXObject::bg_opacity(const float opacity) {
   lv_obj_set_style_bg_opa(lv_obj, opacity * 255, LV_PART_MAIN);
   return *this;
 }
@@ -247,6 +252,16 @@ lv_obj_t* MXObject::get_text_obj() {
     return lv_obj;
   }
   return nullptr;
+}
+
+MXObject& MXObject::add_style(const lv_style_t* style) {
+  lv_obj_add_style(lv_obj, style, LV_PART_MAIN);
+  return *this;
+}
+
+MXObject& MXObject::remove_style(const lv_style_t* style) {
+  lv_obj_remove_style(lv_obj, style, LV_PART_MAIN);
+  return *this;
 }
 
 MXObject& MXObject::clickable(bool value = true) {

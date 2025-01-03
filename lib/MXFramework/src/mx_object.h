@@ -122,11 +122,13 @@ class MXObject {
                           const lv_coord_t offset_y = 0) {
     return this->align(LV_ALIGN_CENTER, offset_x, offset_y);
   }
-  inline MXObject& center_x(const lv_coord_t offset_x = 0) {
-    return this->align(LV_ALIGN_TOP_MID, offset_x, 0);
+  inline MXObject& center_x(const lv_coord_t offset_x = 0,
+                            const lv_coord_t offset_y = 0) {
+    return this->align(LV_ALIGN_TOP_MID, offset_x, offset_y);
   }
-  inline MXObject& center_y(const lv_coord_t offset_y = 0) {
-    return this->align(LV_ALIGN_LEFT_MID, 0, offset_y);
+  inline MXObject& center_y(const lv_coord_t offset_x = 0,
+                            const lv_coord_t offset_y = 0) {
+    return this->align(LV_ALIGN_LEFT_MID, offset_x, offset_y);
   }
 
   // Border
@@ -137,6 +139,7 @@ class MXObject {
 
   // Background
   MXObject& bg(const lv_color_t color, const float opacity = 1);
+  MXObject& bg_opacity(const float opacity);
   MXObject& bg_transparent() { return this->bg(lv_color_black(), 0); }
   MXObject& bg_primary(const float opacity = 1) {
     return this->bg(mx_theme_color_primary(), opacity);
@@ -192,6 +195,10 @@ class MXObject {
     }
     return *this;
   }
+
+  // Style
+  MXObject& add_style(const lv_style_t* style);
+  MXObject& remove_style(const lv_style_t* style);
 
   // Flags
   MXObject& clickable(bool value);
