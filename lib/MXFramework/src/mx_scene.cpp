@@ -1,5 +1,7 @@
 #include "mx_scene.h"
 
+MXScene* MXScene::_activeScene = nullptr;
+
 void MXScene::begin() {
   if (isInitialized()) {
     return;
@@ -18,8 +20,12 @@ void MXScene::activate() {
   if (isActive()) {
     return;
   }
+  if (_activeScene) {
+    _activeScene->deactivate();
+    _activeScene = nullptr;
+  }
   onActivating();
-  _active = true;
+  _activeScene = this;
 }
 
 void MXScene::deactivate() {
@@ -27,7 +33,9 @@ void MXScene::deactivate() {
     return;
   }
   onDeactivating();
-  _active = false;
+  if (_activeScene == this) {
+    _activeScene = nullptr;
+  }
 }
 
 void MXScene::show(lv_scr_load_anim_t animation, uint32_t duration,

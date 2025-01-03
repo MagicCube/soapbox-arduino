@@ -2,12 +2,6 @@
 
 #include "mx_scene.h"
 
-MXObject::MXObject(lv_obj_t* obj) : lv_obj(obj) {
-  if (obj == nullptr) {
-    lv_obj = lv_obj_create(nullptr);
-  }
-}
-
 MXObject& MXObject::w(const int32_t width) {
   lv_obj_set_width(lv_obj, width);
   return *this;

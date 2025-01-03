@@ -11,7 +11,17 @@ class MXScene;
 
 class MXObject {
  public:
-  MXObject(lv_obj_t* lv_obj = nullptr);
+  inline MXObject(lv_obj_t* obj = nullptr) : lv_obj(obj) {
+    if (obj == nullptr) {
+      lv_obj = lv_obj_create(nullptr);
+    }
+  }
+
+  inline ~MXObject() {
+    if (lv_obj) {
+      lv_obj_del(lv_obj);
+    }
+  }
 
   inline MXObject& object(const int32_t width = -1, const int32_t height = -1) {
     lv_obj_t* lv_object = lv_obj_create(lv_obj);
@@ -129,7 +139,11 @@ class MXObject {
     return *this;
   }
 
+  // Events
   MXObject& on(const lv_event_code_t event, const mx_event_callback_t callback);
+  inline MXObject& onClick(const mx_event_callback_t callback) {
+    return this->on(LV_EVENT_CLICKED, callback);
+  }
 
  protected:
   lv_obj_t* lv_obj;
@@ -140,3 +154,11 @@ class MXObject {
 MXObject* mx();
 MXObject* mx(lv_obj_t* lv_obj);
 MXObject* mx(MXScene* scene);
+
+inline lv_color_t mx_theme_color_primary() {
+  return lv_theme_get_color_primary(lv_screen_active());
+}
+
+inline lv_color_t mx_theme_color_secondary() {
+  return lv_theme_get_color_secondary(lv_screen_active());
+}
