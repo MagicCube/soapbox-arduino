@@ -2,12 +2,15 @@
 
 #include <mx.h>
 
+#include "audio/audio.h"
+#include "audio/audio_recorder.h"
 #include "wifi/wifi_connection.h"
 
 LV_IMAGE_DECLARE(microphone);
 
 #define BUTTON_COLOR rgb(0xFF2C55)
-#define BG_COLOR rgb(0x522069)
+#define BG_COLOR rgb(0x000000)
+// #define BG_COLOR rgb(0x522069)
 
 static lv_style_t bigRingPressedStyle;
 static lv_style_t midRingPressedStyle;
@@ -18,8 +21,14 @@ class MainScene : public MXScene {
   MXObject* bigRing;
   MXObject* midRing;
 
+  AudioRecorder* audioRecorder;
+
   inline void onInit() override {
     MXScene::onInit();
+
+    audioRecorder = new AudioRecorder();
+    audioRecorder->begin();
+
     root()->bg(BG_COLOR).scrollable(false);
 
     bigRing = &root()
@@ -46,12 +55,18 @@ class MainScene : public MXScene {
                          bigRing->bg_opacity(0.05);
                          midRing->add_style(&midRingPressedStyle);
                          midRing->bg_opacity(0.05);
+                         Audio.playSystemSound(SYSTEM_SOUND_HIGHER_BEEP);
+                         audioRecorder->startRecording();
                        })
                        .onReleased([this](MXEvent* e) {
                          bigRing->remove_style(&bigRingPressedStyle);
                          bigRing->bg_opacity(0.1);
                          midRing->remove_style(&midRingPressedStyle);
                          midRing->bg_opacity(0.1);
+                         Audio.playSystemSound(SYSTEM_SOUND_LOWER_BEEP);
+                         audioRecorder->stopRecording();
+                         audioRecorder->play();
+                         Audio.playSystemSound(SYSTEM_SOUND_LOWER_BEEP);
                        });
     speakButton->image(&microphone).center(0).clickable(false);
 
@@ -65,5 +80,21 @@ class MainScene : public MXScene {
     lv_style_set_transform_height(style, size);
   }
 
-  inline void dispose() override { MXScene::dispose(); }
+  inline void onUpdate() {
+    MXScene::onUpdate();
+    audioRecorder->update();
+  }
+
+  inline void dispose() override {
+    MXScene::dispose();
+
+    delete bigRing;
+    bigRing = nullptr;
+    delete midRing;
+    midRing = nullptr;
+    delete speakButton;
+    speakButton = nullptr;
+    delete audioRecorder;
+    audioRecorder = nullptr;
+  }
 };

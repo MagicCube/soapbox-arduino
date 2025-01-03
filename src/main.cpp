@@ -15,8 +15,10 @@ MainScene mainScene;
 WiFiConnectionScene wifiConnectionScene;
 
 void lv_init_ui() {
-  wifiConnectionScene.begin();
-  wifiConnectionScene.show(LV_SCR_LOAD_ANIM_NONE);
+  // wifiConnectionScene.begin();
+  // wifiConnectionScene.show(LV_SCR_LOAD_ANIM_NONE);
+  mainScene.begin();
+  mainScene.show();
 }
 
 void setup() {
@@ -48,11 +50,11 @@ void keepUIUpdate() {
   if (MXScene::activeScene()) {
     MXScene::activeScene()->update();
   }
-  if (WiFiConnection.isConnected() &&
-      MXScene::activeScene() == &wifiConnectionScene) {
-    mainScene.begin();
-    mainScene.show();
-  }
+  // if (WiFiConnection.isConnected() &&
+  //     MXScene::activeScene() == &wifiConnectionScene) {
+  //   mainScene.begin();
+  //   mainScene.show();
+  // }
 }
 
 void keepLVUpdate() {

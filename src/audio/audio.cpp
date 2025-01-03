@@ -38,14 +38,18 @@ void I2SAudio::buzz(const float_t frequency, const float_t duration,
 void I2SAudio::playSystemSound(const SystemSound sound,
                                const uint8_t volume) const {
   switch (sound) {
-    case SYSTEM_SOUND_SINGLE_BEEP:
-      buzz(NOTE_MI * 8, 0.06, volume);
+    case SYSTEM_SOUND_HIGHER_BEEP:
+      buzz(NOTE_MI * 7, 0.05, volume);
+      break;
+
+    case SYSTEM_SOUND_LOWER_BEEP:
+      buzz(NOTE_DO * 7, 0.05, volume);
       break;
 
     case SYSTEM_SOUND_DOUBLE_BEEP:
-      buzz(NOTE_MI * 8, 0.03, volume);
-      delay(80);
-      buzz(NOTE_MI * 8, 0.03, volume);
+      buzz(NOTE_MI * 7, 0.05, volume);
+      delay(50);
+      buzz(NOTE_MI * 7, 0.05, volume);
       break;
 
     case SYSTEM_SOUND_WELCOME:
@@ -64,4 +68,10 @@ size_t I2SAudio::write(int16_t* data, size_t length) const {
   size_t bytesWritten;
   i2s_write(AUDIO_OUT, data, length, &bytesWritten, portMAX_DELAY);
   return bytesWritten;
+}
+
+size_t I2SAudio::read(int16_t* data, size_t length) const {
+  size_t bytesRead;
+  i2s_read(AUDIO_IN, data, length, &bytesRead, portMAX_DELAY);
+  return bytesRead;
 }
