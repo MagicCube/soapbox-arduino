@@ -50,6 +50,10 @@ void lv_setup_theme() {
 
   lv_display_set_theme(lv_display_get_default(),
                        th); /* Assign theme to display */
+  lv_obj_t *active_screen = lv_screen_active();
+  if (active_screen) {
+    lv_obj_set_style_bg_color(active_screen, lv_color_black(), LV_PART_MAIN);
+  }
 }
 
 void lv_setup() {

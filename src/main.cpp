@@ -6,15 +6,16 @@
 
 #include "audio/audio.h"
 #include "setup/lv_setup.h"
-// #include "wifi/wifi_connection.h"
+#include "wifi/wifi_connection.h"
 
-AsyncHTTPRequest httpRequest;
+// Scenes
+#include "ui/scenes/WiFiConnectionScene.h"
+
+WiFiConnectionScene wifiConnectionScene;
 
 void lv_init_ui() {
-  mx()->button("Record", FONT_SIZE_4XL)
-      .size_percent(50)
-      .center()
-      .rounded_full();
+  wifiConnectionScene.begin();
+  wifiConnectionScene.show(LV_SCR_LOAD_ANIM_NONE);
 }
 
 void setup() {
@@ -26,11 +27,10 @@ void setup() {
   Display.begin();
   Display.rotate(180);
 
-  // WiFiConnection.begin();
-  // WiFiConnection.connect();
-
   lv_setup();
   lv_init_ui();
+
+  WiFiConnection.begin();
 }
 
 time_t lastPrintTime = 0;
@@ -41,9 +41,6 @@ void keepSerialAlive() {
     Serial.print("Free memory: ");
     Serial.println(esp_get_free_heap_size());
 
-    // Serial.print("WiFi IP: ");
-    // Serial.println(WiFi.localIP());
-
     lastPrintTime = millis();
   }
 }
@@ -53,14 +50,11 @@ void keepLVUpdate() {
   delay(5);
 }
 
-// void keepWiFiConnected() {
-//   if (!WiFiConnection.isConnected()) {
-//     WiFiConnection.connect();
-//   }
-// }
-
 void loop() {
   keepSerialAlive();
   keepLVUpdate();
-  // keepWiFiConnected();
+
+  if (MXScene::activeScene()) {
+    MXScene::activeScene()->update();
+  }
 }
