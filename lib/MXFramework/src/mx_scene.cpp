@@ -17,6 +17,9 @@ MXObject* MXScene::createRoot() {
 }
 
 void MXScene::activate() {
+  if (!isInitialized()) {
+    begin();
+  }
   if (isActive()) {
     return;
   }

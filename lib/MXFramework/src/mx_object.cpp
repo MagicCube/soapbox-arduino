@@ -1,6 +1,7 @@
 #include "mx_object.h"
 
 #include "mx_scene.h"
+#include "utils/color.h"
 
 MXObject& MXObject::w(const int32_t width) {
   lv_obj_set_width(lv_obj, width);
@@ -98,13 +99,38 @@ MXObject& MXObject::p_y(const lv_coord_t padding_y) {
   return *this;
 }
 
-MXObject& MXObject::align(const lv_align_t align) {
-  lv_obj_align(lv_obj, align, 0, 0);
+MXObject& MXObject::align(const lv_align_t align, const lv_coord_t offset_x,
+                          const lv_coord_t offset_y) {
+  lv_obj_align(lv_obj, align, offset_x, offset_y);
   return *this;
 }
 
-MXObject& MXObject::bg(const lv_color_t color) {
+MXObject& MXObject::border(const uint16_t size, const lv_color_t color,
+                           const lv_border_side_t side) {
+  if (size == 0) {
+    lv_obj_set_style_border_width(lv_obj, 0, LV_PART_MAIN);
+    lv_obj_set_style_border_side(lv_obj, LV_BORDER_SIDE_NONE, LV_PART_MAIN);
+  } else {
+    lv_obj_set_style_border_width(lv_obj, size, LV_PART_MAIN);
+    lv_obj_set_style_border_side(lv_obj, side, LV_PART_MAIN);
+    lv_obj_set_style_border_color(lv_obj, color, LV_PART_MAIN);
+  }
+  return *this;
+}
+
+MXObject& MXObject::border_none() {
+  border(0);
+  return *this;
+}
+
+MXObject& MXObject::bg(const lv_color_t color, const float opacity) {
   lv_obj_set_style_bg_color(lv_obj, color, LV_PART_MAIN);
+  lv_obj_set_style_bg_opa(lv_obj, opacity * 255, LV_PART_MAIN);
+  return *this;
+}
+
+MXObject& MXObject::opacity(const float opacity) {
+  lv_obj_set_style_opa(lv_obj, opacity * 255, LV_PART_MAIN);
   return *this;
 }
 
@@ -221,6 +247,24 @@ lv_obj_t* MXObject::get_text_obj() {
     return lv_obj;
   }
   return nullptr;
+}
+
+MXObject& MXObject::clickable(bool value = true) {
+  if (value) {
+    lv_obj_add_flag(lv_obj, LV_OBJ_FLAG_CLICKABLE);
+  } else {
+    lv_obj_clear_flag(lv_obj, LV_OBJ_FLAG_CLICKABLE);
+  }
+  return *this;
+}
+
+MXObject& MXObject::scrollable(bool value = true) {
+  if (value) {
+    lv_obj_add_flag(lv_obj, LV_OBJ_FLAG_SCROLLABLE);
+  } else {
+    lv_obj_clear_flag(lv_obj, LV_OBJ_FLAG_SCROLLABLE);
+  }
+  return *this;
 }
 
 MXObject& MXObject::on(const lv_event_code_t event,

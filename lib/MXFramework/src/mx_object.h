@@ -5,7 +5,14 @@
 
 #include "mx_event.h"
 #include "mx_font.h"
-#include "utils/color.h"
+
+inline lv_color_t mx_theme_color_primary() {
+  return lv_theme_get_color_primary(lv_screen_active());
+}
+
+inline lv_color_t mx_theme_color_secondary() {
+  return lv_theme_get_color_secondary(lv_screen_active());
+}
 
 class MXScene;
 
@@ -32,6 +39,8 @@ class MXObject {
     if (height >= 0) {
       object->h(height);
     }
+    object->bg_transparent();
+    object->border_none();
     return *object;
   }
 
@@ -50,13 +59,27 @@ class MXObject {
                           const MXFontSize fontSize = MX_FONT_SIZE_DEFAULT) {
     lv_obj_t* lv_button = lv_btn_create(lv_obj);
     MXObject* button = new MXObject(lv_button);
-    lv_obj_t* lv_label = lv_label_create(lv_button);
-    lv_obj_align(lv_label, LV_ALIGN_CENTER, 0, 0);
     if (text != nullptr) {
+      lv_obj_t* lv_label = lv_label_create(lv_button);
+      lv_obj_align(lv_label, LV_ALIGN_CENTER, 0, 0);
       button->text(text);
+      button->text(fontSize);
     }
-    button->text(fontSize);
     return *button;
+  }
+
+  inline MXObject& image(const void* src = nullptr) {
+    lv_obj_t* lv_image = lv_img_create(lv_obj);
+    MXObject* image = new MXObject(lv_image);
+    if (src != nullptr) {
+      image->src(src);
+    }
+    return *image;
+  }
+
+  inline MXObject& src(const void* src) {
+    lv_img_set_src(lv_obj, src);
+    return *this;
   }
 
   inline lv_obj_t* lv_object() { return lv_obj; }
@@ -93,14 +116,43 @@ class MXObject {
   MXObject& p_y(const lv_coord_t padding_y);
 
   // Align
-  MXObject& align(const lv_align_t align);
-  inline MXObject& center() { return this->align(LV_ALIGN_CENTER); }
-  inline MXObject& center_x() { return this->align(LV_ALIGN_TOP_MID); }
-  inline MXObject& center_y() { return this->align(LV_ALIGN_LEFT_MID); }
+  MXObject& align(const lv_align_t align, const lv_coord_t offset_x = 0,
+                  const lv_coord_t offset_y = 0);
+  inline MXObject& center(const lv_coord_t offset_x = 0,
+                          const lv_coord_t offset_y = 0) {
+    return this->align(LV_ALIGN_CENTER, offset_x, offset_y);
+  }
+  inline MXObject& center_x(const lv_coord_t offset_x = 0) {
+    return this->align(LV_ALIGN_TOP_MID, offset_x, 0);
+  }
+  inline MXObject& center_y(const lv_coord_t offset_y = 0) {
+    return this->align(LV_ALIGN_LEFT_MID, 0, offset_y);
+  }
+
+  // Border
+  MXObject& border(const uint16_t size,
+                   const lv_color_t color = lv_color_black(),
+                   const lv_border_side_t side = LV_BORDER_SIDE_FULL);
+  MXObject& border_none();
 
   // Background
-  MXObject& bg(const lv_color_t color);
-  inline MXObject& bg(const uint32_t color) { return this->bg(rgb(color)); }
+  MXObject& bg(const lv_color_t color, const float opacity = 1);
+  MXObject& bg_transparent() { return this->bg(lv_color_black(), 0); }
+  MXObject& bg_primary(const float opacity = 1) {
+    return this->bg(mx_theme_color_primary(), opacity);
+  }
+  MXObject& bg_secondary(const float opacity = 1) {
+    return this->bg(mx_theme_color_secondary(), opacity);
+  }
+  MXObject& bg_white(const float opacity = 1) {
+    return this->bg(lv_color_white(), opacity);
+  }
+  MXObject& bg_black(const float opacity = 1) {
+    return this->bg(lv_color_black(), opacity);
+  }
+
+  // Opacity
+  MXObject& opacity(const float opacity);
 
   // Font
   MXObject& font(const lv_font_t* font);
@@ -112,7 +164,9 @@ class MXObject {
   // Text Style
   MXObject& text(const MXFontSize size);
   MXObject& text(const lv_color_t color);
-  inline MXObject& text(const uint32_t color) { return this->text(rgb(color)); }
+  MXObject& text_primary() { return this->text(mx_theme_color_primary()); }
+  MXObject& text_white() { return this->text(lv_color_white()); }
+  MXObject& text_black() { return this->text(lv_color_black()); }
   MXObject& text_align(const lv_text_align_t align);
   inline MXObject& text_center() {
     return this->text_align(LV_TEXT_ALIGN_CENTER);
@@ -139,10 +193,20 @@ class MXObject {
     return *this;
   }
 
+  // Flags
+  MXObject& clickable(bool value);
+  MXObject& scrollable(bool value);
+
   // Events
   MXObject& on(const lv_event_code_t event, const mx_event_callback_t callback);
   inline MXObject& onClick(const mx_event_callback_t callback) {
     return this->on(LV_EVENT_CLICKED, callback);
+  }
+  inline MXObject& onPressed(const mx_event_callback_t callback) {
+    return this->on(LV_EVENT_PRESSED, callback);
+  }
+  inline MXObject& onReleased(const mx_event_callback_t callback) {
+    return this->on(LV_EVENT_RELEASED, callback);
   }
 
  protected:
@@ -154,11 +218,3 @@ class MXObject {
 MXObject* mx();
 MXObject* mx(lv_obj_t* lv_obj);
 MXObject* mx(MXScene* scene);
-
-inline lv_color_t mx_theme_color_primary() {
-  return lv_theme_get_color_primary(lv_screen_active());
-}
-
-inline lv_color_t mx_theme_color_secondary() {
-  return lv_theme_get_color_secondary(lv_screen_active());
-}
