@@ -55,12 +55,11 @@ class MainScene : public MXScene {
                        });
     speakButton->image(&microphone).center(0).clickable(false);
 
-    // Big ring pressed style
-    init_style(&bigRingPressedStyle, 40);
-    init_style(&midRingPressedStyle, 16);
+    init_pressed_style(&bigRingPressedStyle, 40);
+    init_pressed_style(&midRingPressedStyle, 16);
   }
 
-  inline void init_style(lv_style_t* style, int32_t size) {
+  inline void init_pressed_style(lv_style_t* style, int32_t size) {
     lv_style_init(style);
     lv_style_set_transform_width(style, size);
     lv_style_set_transform_height(style, size);
