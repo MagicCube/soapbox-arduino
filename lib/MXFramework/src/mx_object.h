@@ -166,10 +166,19 @@ class MXObject {
 
   // Text Style
   MXObject& text(const MXFontSize size);
-  MXObject& text(const lv_color_t color);
-  MXObject& text_primary() { return this->text(mx_theme_color_primary()); }
-  MXObject& text_white() { return this->text(lv_color_white()); }
-  MXObject& text_black() { return this->text(lv_color_black()); }
+  MXObject& text(const lv_color_t color, const float opacity = 1);
+  MXObject& text_primary(const float opacity = 1) {
+    return this->text(mx_theme_color_primary(), opacity);
+  }
+  MXObject& text_secondary() { return this->text(lv_color_white(), 0.6); }
+  MXObject& text_tertiary() { return this->text(lv_color_white(), 0.33); }
+  MXObject& text_white(const float opacity = 1) {
+    return this->text(lv_color_white(), opacity);
+  }
+  MXObject& text_black(const float opacity = 1) {
+    return this->text(lv_color_black(), opacity);
+  }
+  MXObject& text_opacity(const float opacity);
   MXObject& text_align(const lv_text_align_t align);
   inline MXObject& text_center() {
     return this->text_align(LV_TEXT_ALIGN_CENTER);

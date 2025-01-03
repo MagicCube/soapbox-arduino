@@ -196,10 +196,19 @@ MXObject& MXObject::text(const MXFontSize size) {
   return *this;
 }
 
-MXObject& MXObject::text(const lv_color_t color) {
+MXObject& MXObject::text(const lv_color_t color, const float opacity) {
   auto text_obj = get_text_obj();
   if (text_obj != nullptr) {
     lv_obj_set_style_text_color(text_obj, color, LV_PART_MAIN);
+    lv_obj_set_style_text_opa(text_obj, opacity * 255, LV_PART_MAIN);
+  }
+  return *this;
+}
+
+MXObject& MXObject::text_opacity(const float opacity) {
+  auto text_obj = get_text_obj();
+  if (text_obj != nullptr) {
+    lv_obj_set_style_text_opa(text_obj, opacity * 255, LV_PART_MAIN);
   }
   return *this;
 }
