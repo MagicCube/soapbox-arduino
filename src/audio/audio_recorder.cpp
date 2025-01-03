@@ -4,9 +4,9 @@ void AudioRecorder::begin() {
   buffer = new CircularBuffer(AUDIO_IN_FRAME_SIZE * AUDIO_IN_FPS * 5);
 }
 
-void AudioRecorder::startRecording() {
-  if (recording) {
-    return;
+void AudioRecorder::record() {
+  if (recording || playing) {
+    stop();
   }
 
   buffer->clear();
@@ -14,29 +14,32 @@ void AudioRecorder::startRecording() {
   recording = true;
 }
 
-void AudioRecorder::stopRecording() {
-  if (!recording) {
-    return;
-  }
-
+void AudioRecorder::stop() {
+  playing = false;
   recording = false;
 }
 
 void AudioRecorder::play() {
-  while (true) {
-    int16_t data[AUDIO_IN_FRAME_SIZE / sizeof(int16_t)];
-    size_t bytesRead = buffer->read((uint8_t*)data, AUDIO_IN_FRAME_SIZE);
-    if (bytesRead == 0) {
-      break;
-    }
-    Audio.write(data, bytesRead);
+  if (recording || playing) {
+    stop();
   }
+
+  playing = true;
 }
 
 void AudioRecorder::update() {
+  int16_t data[AUDIO_IN_FRAME_SIZE / sizeof(int16_t)];
   if (recording) {
-    int16_t data[AUDIO_IN_FRAME_SIZE / sizeof(int16_t)];
     size_t bytesRead = Audio.read(data, AUDIO_IN_FRAME_SIZE);
     buffer->write((uint8_t*)data, bytesRead);
+    if (bytesRead == 0) {
+      stop();
+    }
+  } else if (playing) {
+    size_t bytesRead = buffer->read((uint8_t*)data, AUDIO_OUT_FRAME_SIZE);
+    Audio.write(data, bytesRead);
+    if (bytesRead == 0) {
+      stop();
+    }
   }
 }

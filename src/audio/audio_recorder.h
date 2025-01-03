@@ -8,8 +8,8 @@
 class AudioRecorder {
  public:
   void begin();
-  void startRecording();
-  void stopRecording();
+  void record();
+  void stop();
   void play();
   void update();
 
@@ -17,5 +17,6 @@ class AudioRecorder {
 
  protected:
   bool recording = false;
+  bool playing = false;
   CircularBuffer *buffer;
 };
