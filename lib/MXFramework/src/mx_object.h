@@ -3,12 +3,15 @@
 #include <Arduino.h>
 #include <lvgl.h>
 
+#include "mx_event.h"
 #include "mx_font.h"
 #include "utils/color.h"
 
+class MXScene;
+
 class MXObject {
  public:
-  MXObject(lv_obj_t* lv_obj);
+  MXObject(lv_obj_t* lv_obj = nullptr);
 
   inline MXObject& object(const int32_t width = -1, const int32_t height = -1) {
     lv_obj_t* lv_object = lv_obj_create(lv_obj);
@@ -23,7 +26,7 @@ class MXObject {
   }
 
   inline MXObject& label(const char* text = nullptr,
-                         const FontSize fontSize = FONT_SIZE_DEFAULT) {
+                         const MXFontSize fontSize = MX_FONT_SIZE_DEFAULT) {
     lv_obj_t* lv_label = lv_label_create(lv_obj);
     MXObject* label = new MXObject(lv_label);
     if (text != nullptr) {
@@ -34,7 +37,7 @@ class MXObject {
   }
 
   inline MXObject& button(const char* text = nullptr,
-                          const FontSize fontSize = FONT_SIZE_DEFAULT) {
+                          const MXFontSize fontSize = MX_FONT_SIZE_DEFAULT) {
     lv_obj_t* lv_button = lv_btn_create(lv_obj);
     MXObject* button = new MXObject(lv_button);
     lv_obj_t* lv_label = lv_label_create(lv_button);
@@ -45,6 +48,8 @@ class MXObject {
     button->text(fontSize);
     return *button;
   }
+
+  inline lv_obj_t* lv_object() { return lv_obj; }
 
   // Size
   MXObject& w(const int32_t width);
@@ -95,7 +100,7 @@ class MXObject {
   MXObject& text_format(const char* format, ...);
 
   // Text Style
-  MXObject& text(const FontSize size);
+  MXObject& text(const MXFontSize size);
   MXObject& text(const lv_color_t color);
   inline MXObject& text(const uint32_t color) { return this->text(rgb(color)); }
   MXObject& text_align(const lv_text_align_t align);
@@ -124,6 +129,8 @@ class MXObject {
     return *this;
   }
 
+  MXObject& on(const lv_event_code_t event, const mx_event_callback_t callback);
+
  protected:
   lv_obj_t* lv_obj;
 
@@ -131,3 +138,5 @@ class MXObject {
 };
 
 MXObject* mx();
+MXObject* mx(lv_obj_t* lv_obj);
+MXObject* mx(MXScene* scene);

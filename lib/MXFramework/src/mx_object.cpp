@@ -1,6 +1,12 @@
 #include "mx_object.h"
 
-MXObject::MXObject(lv_obj_t* obj) : lv_obj(obj) {}
+#include "mx_scene.h"
+
+MXObject::MXObject(lv_obj_t* obj) : lv_obj(obj) {
+  if (obj == nullptr) {
+    lv_obj = lv_obj_create(nullptr);
+  }
+}
 
 MXObject& MXObject::w(const int32_t width) {
   lv_obj_set_width(lv_obj, width);
@@ -135,30 +141,30 @@ MXObject& MXObject::text_format(const char* format, ...) {
   return *this;
 }
 
-MXObject& MXObject::text(const FontSize size) {
+MXObject& MXObject::text(const MXFontSize size) {
   switch (size) {
-    case FONT_SIZE_14:
+    case MX_FONT_SIZE_14:
       font(&lv_font_montserrat_14);
       break;
-    case FONT_SIZE_16:
+    case MX_FONT_SIZE_16:
       font(&lv_font_montserrat_16);
       break;
-    case FONT_SIZE_18:
+    case MX_FONT_SIZE_18:
       font(&lv_font_montserrat_18);
       break;
-    case FONT_SIZE_20:
+    case MX_FONT_SIZE_20:
       font(&lv_font_montserrat_20);
       break;
-    case FONT_SIZE_24:
+    case MX_FONT_SIZE_24:
       font(&lv_font_montserrat_24);
       break;
-    case FONT_SIZE_30:
+    case MX_FONT_SIZE_30:
       font(&lv_font_montserrat_30);
       break;
-    case FONT_SIZE_36:
+    case MX_FONT_SIZE_36:
       font(&lv_font_montserrat_36);
       break;
-    case FONT_SIZE_48:
+    case MX_FONT_SIZE_48:
       font(&lv_font_montserrat_48);
       break;
   }
@@ -223,7 +229,27 @@ lv_obj_t* MXObject::get_text_obj() {
   return nullptr;
 }
 
+MXObject& MXObject::on(const lv_event_code_t event,
+                       const mx_event_callback_t callback) {
+  MXEvent* mx_event = new MXEvent{event, this, callback};
+  lv_obj_add_event_cb(
+      lv_obj,
+      [](lv_event_t* lv_event) {
+        MXEvent* mx_event = (MXEvent*)lv_event_get_user_data(lv_event);
+        mx_event->callback(mx_event);
+      },
+      event, mx_event);
+  return *this;
+}
+
 MXObject* mx() {
   MXObject* obj = new MXObject(lv_scr_act());
   return obj;
 }
+
+MXObject* mx(lv_obj_t* lv_obj) {
+  MXObject* obj = new MXObject(lv_obj);
+  return obj;
+}
+
+MXObject* mx(MXScene* scene) { return scene->root(); }
