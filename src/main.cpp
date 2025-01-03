@@ -11,7 +11,10 @@
 AsyncHTTPRequest httpRequest;
 
 void lv_init_ui() {
-  mx()->button("Record", FONT_SIZE_XL).center().text("Stop");
+  mx()->button("Record", FONT_SIZE_4XL)
+      .size_percent(50)
+      .center()
+      .rounded_full();
 }
 
 void setup() {

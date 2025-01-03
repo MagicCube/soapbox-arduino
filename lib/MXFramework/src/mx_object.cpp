@@ -3,7 +3,7 @@
 MXObject::MXObject(lv_obj_t* obj) : lv_obj(obj) {}
 
 MXObject& MXObject::w(const int32_t width) {
-  // lv_obj_set_width(lv_obj, width);
+  lv_obj_set_width(lv_obj, width);
   return *this;
 }
 
@@ -14,11 +14,6 @@ MXObject& MXObject::h(const int32_t height) {
 
 MXObject& MXObject::size(const int32_t width, const int32_t height) {
   lv_obj_set_size(lv_obj, width, height);
-  return *this;
-}
-
-MXObject& MXObject::size(const int32_t length) {
-  size(length, length);
   return *this;
 }
 
@@ -105,21 +100,6 @@ MXObject& MXObject::p_y(const lv_coord_t padding_y) {
 
 MXObject& MXObject::align(const lv_align_t align) {
   lv_obj_align(lv_obj, align, 0, 0);
-  return *this;
-}
-
-MXObject& MXObject::center() {
-  align(LV_ALIGN_CENTER);
-  return *this;
-}
-
-MXObject& MXObject::center_x() {
-  align(LV_ALIGN_TOP_MID);
-  return *this;
-}
-
-MXObject& MXObject::center_y() {
-  align(LV_ALIGN_LEFT_MID);
   return *this;
 }
 
@@ -214,11 +194,6 @@ MXObject& MXObject::rounded(const lv_coord_t radius) {
   return *this;
 }
 
-MXObject& MXObject::rounded_full() {
-  rounded(LV_RADIUS_CIRCLE);
-  return *this;
-}
-
 MXObject& MXObject::clip_content() {
   lv_obj_set_style_clip_corner(lv_obj, true, LV_PART_MAIN);
   return *this;
@@ -234,13 +209,9 @@ MXObject& MXObject::hide() {
   return *this;
 }
 
-MXObject& MXObject::toggle(bool visible) {
-  if (visible) {
-    show();
-  } else {
-    hide();
-  }
-  return *this;
+MXObject& MXObject::toggle() {
+  bool hidden = lv_obj_has_flag(lv_obj, LV_OBJ_FLAG_HIDDEN);
+  return this->toggle(!hidden);
 }
 
 lv_obj_t* MXObject::get_text_obj() {
