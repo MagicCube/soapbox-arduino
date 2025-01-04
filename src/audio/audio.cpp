@@ -3,15 +3,25 @@
 I2SAudio Audio;
 
 void I2SAudio::begin() {
+#if defined(SPEAKER_MUTE_PIN)
   pinMode(SPEAKER_MUTE_PIN, OUTPUT);
+#endif
   i2s_init_audio_out();
   i2s_init_audio_in();
   unmute();
 }
 
-void I2SAudio::mute() const { digitalWrite(SPEAKER_MUTE_PIN, LOW); }
+void I2SAudio::mute() const {
+#if defined(SPEAKER_MUTE_PIN)
+  digitalWrite(SPEAKER_MUTE_PIN, LOW);
+#endif
+}
 
-void I2SAudio::unmute() const { digitalWrite(SPEAKER_MUTE_PIN, HIGH); }
+void I2SAudio::unmute() const {
+#if defined(SPEAKER_MUTE_PIN)
+  digitalWrite(SPEAKER_MUTE_PIN, HIGH);
+#endif
+}
 
 const float_t MAX_AMPLITUDE = 32767;
 void I2SAudio::buzz(const float_t frequency, const float_t duration,
