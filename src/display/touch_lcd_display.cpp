@@ -1,7 +1,12 @@
-#include "touch_lcd_display.h"
 
 #include "display_conf.h"
+
+#if DISPLAY_TOUCH_ENABLED == 1
+
 #include "drivers/touch_cst816s_driver.h"
+#include "touch_lcd_display.h"
+
+TouchLCDDisplay Display;
 
 void TouchLCDDisplay::begin() {
   LCDDisplay::begin();
@@ -42,3 +47,5 @@ int TouchLCDDisplay::readTouchPoints(ESP_PanelTouchPoint* points,
                                      const size_t num_points) const {
   return touch->readPoints(points, num_points);
 }
+
+#endif

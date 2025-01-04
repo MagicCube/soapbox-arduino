@@ -4,6 +4,8 @@
 #include <ESP_IOExpander.h>
 #include <ESP_Panel_Library.h>
 
+#include "display_conf.h"
+
 class LCDDisplay {
  public:
   void begin();
@@ -27,3 +29,7 @@ class LCDDisplay {
   ESP_PanelLcd* lcd = nullptr;
   ESP_PanelBacklight* backlight = nullptr;
 };
+
+#if DISPLAY_TOUCH_ENABLED == 0
+extern LCDDisplay Display;
+#endif

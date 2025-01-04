@@ -4,6 +4,8 @@
 
 #include "lcd_display.h"
 
+#if DISPLAY_TOUCH_ENABLED == 1
+
 class TouchLCDDisplay : public LCDDisplay {
  public:
   void begin();
@@ -16,3 +18,7 @@ class TouchLCDDisplay : public LCDDisplay {
  protected:
   ESP_PanelTouch* touch = nullptr;
 };
+
+extern TouchLCDDisplay Display;
+
+#endif

@@ -1,8 +1,11 @@
 #include "lcd_display.h"
 
-#include "display_conf.h"
 #include "drivers/display_backlight_driver.h"
 #include "drivers/display_driver.h"
+
+#if DISPLAY_TOUCH_ENABLED == 0
+LCDDisplay Display;
+#endif
 
 void LCDDisplay::begin() {
   lcd = display_init();

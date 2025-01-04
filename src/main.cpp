@@ -13,8 +13,6 @@
 #include "ui/scenes/voice_repeater_scene.h"
 #include "ui/scenes/wifi_connection_scene.h"
 
-TouchLCDDisplay Display;
-
 MainScene mainScene;
 // VoiceRepeaterScene voiceRepeaterScene;
 // WiFiConnectionScene wifiConnectionScene;
