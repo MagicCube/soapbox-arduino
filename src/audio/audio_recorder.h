@@ -11,10 +11,11 @@ class AudioRecorder {
   void play();
   void update();
 
+  bool isPlaying() const { return playing; }
   bool isRecording() const { return recording; }
 
  protected:
-  bool recording = false;
   bool playing = false;
+  bool recording = false;
   CircularBuffer *buffer;
 };
