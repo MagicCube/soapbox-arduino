@@ -1,7 +1,5 @@
 #pragma once
 
-#include <mx.h>
-
 #include "audio/audio.h"
 #include "buffering/circular_buffer.h"
 
