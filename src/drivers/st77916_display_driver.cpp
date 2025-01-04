@@ -1,5 +1,7 @@
 #include "st77916_display_driver.h"
 
+#include <Arduino.h>
+
 #define TFT_SPI_FREQ_HZ (50 * 1000 * 1000)
 
 void st77916_clear(ESP_PanelLcd_ST77916* lcd);
