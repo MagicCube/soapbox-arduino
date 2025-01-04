@@ -10,19 +10,20 @@
 
 #include "pin_conf.h"
 
-#define TFT_SPI_FREQ_HZ (50 * 1000 * 1000)
+#define DISPLAY_SPI_FREQ_HZ (50 * 1000 * 1000)
 
 void display_clear(ESP_PanelLcd* display);
 
 ESP_PanelLcd* display_init() {
   // Bus
-  ESP_PanelBus_QSPI* bus = new ESP_PanelBus_QSPI(TFT_CS, TFT_SCK, TFT_SDA0,
-                                                 TFT_SDA1, TFT_SDA2, TFT_SDA3);
-  bus->configQspiFreqHz(TFT_SPI_FREQ_HZ);
+  ESP_PanelBus_QSPI* bus =
+      new ESP_PanelBus_QSPI(DISPLAY_CS, DISPLAY_SCK, DISPLAY_SDA0, DISPLAY_SDA1,
+                            DISPLAY_SDA2, DISPLAY_SDA3);
+  bus->configQspiFreqHz(DISPLAY_SPI_FREQ_HZ);
   bus->begin();
 
   // LCD
-  auto lcd = new ESP_PanelLcd_ST77916(bus, DISPLAY_COLOR_BITS, TFT_RST);
+  auto lcd = new ESP_PanelLcd_ST77916(bus, DISPLAY_COLOR_BITS, DISPLAY_RST);
   lcd->configColorRgbOrder(false);
   lcd->init();
   lcd->reset();

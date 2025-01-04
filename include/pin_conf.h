@@ -1,14 +1,13 @@
 #pragma once
 
+#define DISPLAY_RST 47
+#define DISPLAY_CS 10
+#define DISPLAY_SCK 9
+#define DISPLAY_SDA0 11
+#define DISPLAY_SDA1 12
+#define DISPLAY_SDA2 13
+#define DISPLAY_SDA3 14
 #define DISPLAY_BLK 15
-
-#define TFT_RST 47
-#define TFT_CS 10
-#define TFT_SCK 9
-#define TFT_SDA0 11
-#define TFT_SDA1 12
-#define TFT_SDA2 13
-#define TFT_SDA3 14
 
 #define TOUCH_SCL 8
 #define TOUCH_SDA 7
