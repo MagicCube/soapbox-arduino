@@ -1,4 +1,4 @@
-#include "display_st77916_driver.h"
+#include "display_st7789_driver.h"
 
 #include <Arduino.h>
 #include <ESP_IOExpander.h>
@@ -6,23 +6,23 @@
 
 #include "display_conf.h"
 
-#ifdef DISPLAY_ST77916
+#ifdef DISPLAY_ST7789
 
 #include "pin_conf.h"
 
-#define TFT_SPI_FREQ_HZ (50 * 1000 * 1000)
+#define DISPLAY_SPI_FREQ_HZ (60 * 1000 * 1000)
 
 void display_clear(ESP_PanelLcd* display);
 
 ESP_PanelLcd* display_init() {
   // Bus
-  ESP_PanelBus_QSPI* bus = new ESP_PanelBus_QSPI(TFT_CS, TFT_SCK, TFT_SDA0,
-                                                 TFT_SDA1, TFT_SDA2, TFT_SDA3);
-  bus->configQspiFreqHz(TFT_SPI_FREQ_HZ);
+  ESP_PanelBus_SPI* bus =
+      new ESP_PanelBus_SPI(DISPLAY_CS, DISPLAY_DC, DISPLAY_CLK, DISPLAY_MOSI);
+  bus->configSpiFreqHz(DISPLAY_SPI_FREQ_HZ);
   bus->begin();
 
   // LCD
-  auto lcd = new ESP_PanelLcd_ST77916(bus, DISPLAY_COLOR_BITS, TFT_RST);
+  auto lcd = new ESP_PanelLcd_ST7789(bus, DISPLAY_COLOR_BITS);
   lcd->configColorRgbOrder(false);
   lcd->init();
   lcd->reset();
@@ -30,33 +30,8 @@ ESP_PanelLcd* display_init() {
   lcd->invertColor(true);
   lcd->displayOn();
   display_clear(lcd);
+  // lcd->colorBarTest(DISPLAY_RES_WIDTH, DISPLAY_RES_HEIGHT);
   return lcd;
-}
-
-bool display_draw_bitmap(ESP_PanelLcd* lcd, const uint8_t* bitmap) {
-  uint8_t* buffer = nullptr;
-
-  try {
-    // Allocate memory for one line
-    buffer = new uint8_t[DISPLAY_RES_WIDTH * 2];
-  } catch (std::bad_alloc& e) {
-    return false;
-  }
-
-  for (int y = 0; y < DISPLAY_RES_HEIGHT; y++) {
-    for (int x = 0; x < DISPLAY_RES_WIDTH; x++) {
-      buffer[x * 2] = bitmap[y * DISPLAY_RES_WIDTH * 2 + x * 2];
-      buffer[x * 2 + 1] = bitmap[y * DISPLAY_RES_WIDTH * 2 + x * 2 + 1];
-    }
-    bool ret =
-        lcd->drawBitmapWaitUntilFinish(0, y, DISPLAY_RES_WIDTH, 1, buffer);
-    if (!ret) {
-      return false;
-    }
-  }
-
-  delete[] buffer;
-  return true;
 }
 
 void display_clear(ESP_PanelLcd* display) {

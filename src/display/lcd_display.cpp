@@ -2,7 +2,7 @@
 
 #include "display_conf.h"
 #include "drivers/display_backlight_driver.h"
-#include "drivers/display_st77916_driver.h"
+#include "drivers/display_driver.h"
 
 void LCDDisplay::begin() {
   lcd = display_init();
@@ -58,5 +58,6 @@ void LCDDisplay::rotate(const uint16_t degree) {
 void LCDDisplay::drawBitmap(const uint8_t *bitmap, const uint32_t x,
                             const uint32_t y, const uint32_t width,
                             const uint32_t height) const {
-  lcd->drawBitmapWaitUntilFinish(x, y, width, height, bitmap);
+  lcd->drawBitmapWaitUntilFinish(x + DISPLAY_OFFSET_X, y + DISPLAY_OFFSET_Y,
+                                 width, height, bitmap);
 }
