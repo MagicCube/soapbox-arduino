@@ -88,14 +88,12 @@ class MXObject {
   MXObject& w(const int32_t width);
   MXObject& h(const int32_t height);
   MXObject& size(const int32_t width, const int32_t height);
-  inline MXObject& size(const int32_t length) {
-    return this->size(length, length);
-  }
+  inline MXObject& size(const int32_t length) { return size(length, length); }
   MXObject& w_percent(const int32_t width);
   MXObject& h_percent(const int32_t height);
   MXObject& size_percent(const int32_t width, const int32_t height);
   inline MXObject& size_percent(const int32_t percent) {
-    return this->size_percent(percent, percent);
+    return size_percent(percent, percent);
   }
   MXObject& w_fit();
   MXObject& h_fit();
@@ -120,15 +118,15 @@ class MXObject {
                   const lv_coord_t offset_y = 0);
   inline MXObject& center(const lv_coord_t offset_x = 0,
                           const lv_coord_t offset_y = 0) {
-    return this->align(LV_ALIGN_CENTER, offset_x, offset_y);
+    return align(LV_ALIGN_CENTER, offset_x, offset_y);
   }
   inline MXObject& center_x(const lv_coord_t offset_x = 0,
                             const lv_coord_t offset_y = 0) {
-    return this->align(LV_ALIGN_TOP_MID, offset_x, offset_y);
+    return align(LV_ALIGN_TOP_MID, offset_x, offset_y);
   }
   inline MXObject& center_y(const lv_coord_t offset_x = 0,
                             const lv_coord_t offset_y = 0) {
-    return this->align(LV_ALIGN_LEFT_MID, offset_x, offset_y);
+    return align(LV_ALIGN_LEFT_MID, offset_x, offset_y);
   }
 
   // Border
@@ -140,18 +138,18 @@ class MXObject {
   // Background
   MXObject& bg(const lv_color_t color, const float opacity = 1);
   MXObject& bg_opacity(const float opacity);
-  MXObject& bg_transparent() { return this->bg(lv_color_black(), 0); }
+  MXObject& bg_transparent() { return bg(lv_color_black(), 0); }
   MXObject& bg_primary(const float opacity = 1) {
-    return this->bg(mx_theme_color_primary(), opacity);
+    return bg(mx_theme_color_primary(), opacity);
   }
   MXObject& bg_secondary(const float opacity = 1) {
-    return this->bg(mx_theme_color_secondary(), opacity);
+    return bg(mx_theme_color_secondary(), opacity);
   }
   MXObject& bg_white(const float opacity = 1) {
-    return this->bg(lv_color_white(), opacity);
+    return bg(lv_color_white(), opacity);
   }
   MXObject& bg_black(const float opacity = 1) {
-    return this->bg(lv_color_black(), opacity);
+    return bg(lv_color_black(), opacity);
   }
 
   // Opacity
@@ -168,26 +166,29 @@ class MXObject {
   MXObject& text(const MXFontSize size);
   MXObject& text(const lv_color_t color, const float opacity = 1);
   MXObject& text_primary(const float opacity = 1) {
-    return this->text(mx_theme_color_primary(), opacity);
+    return text(mx_theme_color_primary(), opacity);
   }
-  MXObject& text_secondary() { return this->text(lv_color_white(), 0.6); }
-  MXObject& text_tertiary() { return this->text(lv_color_white(), 0.33); }
+  MXObject& text_secondary() { return text(lv_color_white(), 0.6); }
+  MXObject& text_tertiary() { return text(lv_color_white(), 0.33); }
   MXObject& text_white(const float opacity = 1) {
-    return this->text(lv_color_white(), opacity);
+    return text(lv_color_white(), opacity);
   }
   MXObject& text_black(const float opacity = 1) {
-    return this->text(lv_color_black(), opacity);
+    return text(lv_color_black(), opacity);
   }
   MXObject& text_opacity(const float opacity);
   MXObject& text_align(const lv_text_align_t align);
-  inline MXObject& text_center() {
-    return this->text_align(LV_TEXT_ALIGN_CENTER);
-  }
+  inline MXObject& text_center() { return text_align(LV_TEXT_ALIGN_CENTER); }
   MXObject& text_letter_space(const lv_coord_t space);
 
   // Corner
   MXObject& rounded(const lv_coord_t radius);
-  inline MXObject& rounded_full() { return this->rounded(LV_RADIUS_CIRCLE); }
+  inline MXObject& rounded_full(const uint16_t diameter = 0) {
+    if (diameter > 0) {
+      size(diameter, diameter);
+    }
+    return rounded(LV_RADIUS_CIRCLE);
+  }
 
   // Clip
   MXObject& clip_content();
@@ -216,13 +217,13 @@ class MXObject {
   // Events
   MXObject& on(const lv_event_code_t event, const mx_event_callback_t callback);
   inline MXObject& onClick(const mx_event_callback_t callback) {
-    return this->on(LV_EVENT_CLICKED, callback);
+    return on(LV_EVENT_CLICKED, callback);
   }
   inline MXObject& onPressed(const mx_event_callback_t callback) {
-    return this->on(LV_EVENT_PRESSED, callback);
+    return on(LV_EVENT_PRESSED, callback);
   }
   inline MXObject& onReleased(const mx_event_callback_t callback) {
-    return this->on(LV_EVENT_RELEASED, callback);
+    return on(LV_EVENT_RELEASED, callback);
   }
 
  protected:
