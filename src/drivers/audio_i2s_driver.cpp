@@ -1,4 +1,4 @@
-#include "i2s_driver.h"
+#include "audio_i2s_driver.h"
 
 #include <Arduino.h>
 #include <driver/i2s.h>

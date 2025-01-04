@@ -1,8 +1,7 @@
 #include "audio.h"
 
 #include "audio_conf.h"
-#include "drivers/i2s_driver.h"
-#include "notes.h"
+#include "drivers/audio_i2s_driver.h"
 
 I2SAudio Audio;
 
