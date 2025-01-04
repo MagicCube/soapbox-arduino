@@ -1,6 +1,6 @@
 #pragma once
 
-#define DISPLAY_BACKLIGHT_PIN 15
+#define DISPLAY_BLK 15
 
 #define TFT_RST 47
 #define TFT_CS 10

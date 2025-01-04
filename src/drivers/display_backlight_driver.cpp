@@ -14,7 +14,7 @@ ESP_PanelBacklight* display_backlight_init() {
                                     .clk_cfg = LEDC_AUTO_CLK};
   ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
 
-  ledc_channel_config_t ledc_channel = {.gpio_num = (DISPLAY_BACKLIGHT_PIN),
+  ledc_channel_config_t ledc_channel = {.gpio_num = (DISPLAY_BLK),
                                         .speed_mode = LEDC_LOW_SPEED_MODE,
                                         .channel = LEDC_CHANNEL_0,
                                         .intr_type = LEDC_INTR_DISABLE,
