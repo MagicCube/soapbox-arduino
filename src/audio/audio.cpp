@@ -52,7 +52,7 @@ void I2SAudio::playSystemSound(const SystemSound sound,
       buzz(NOTE_MI * 7, 0.05, volume);
       break;
 
-    case SYSTEM_SOUND_WELCOME:
+    case SYSTEM_SOUND_STARTUP:
       buzz(NOTE_MI * 7, 0.1, volume);
       buzz(NOTE_DO * 7, 0.1, volume);
       buzz(NOTE_RE * 7, 0.1, volume);

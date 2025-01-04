@@ -27,7 +27,7 @@ void setup() {
   Serial.begin(115200);
 
   Audio.begin();
-  Audio.playSystemSound(SYSTEM_SOUND_WELCOME);
+  Audio.playSystemSound(SYSTEM_SOUND_STARTUP);
 
   Display.begin();
   Display.rotate(180);
