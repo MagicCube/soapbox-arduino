@@ -7,6 +7,7 @@
 void LCDDisplay::begin() {
   lcd = display_init();
   backlight = display_backlight_init();
+  setBrightness(75);
 }
 
 uint16_t LCDDisplay::width() const { return DISPLAY_RES_WIDTH; }
