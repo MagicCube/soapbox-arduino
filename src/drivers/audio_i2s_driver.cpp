@@ -47,9 +47,9 @@ void i2s_init_audio_out() {
       .use_apll = false,
       .tx_desc_auto_clear = true};
 
-  i2s_pin_config_t pin_config = {.bck_io_num = SPEAKER_I2S_BCK_IO,
-                                 .ws_io_num = SPEAKER_I2S_WS_IO,
-                                 .data_out_num = SPEAKER_I2S_DO_IO,
+  i2s_pin_config_t pin_config = {.bck_io_num = SPEAKER_I2S_BCK,
+                                 .ws_io_num = SPEAKER_I2S_WS,
+                                 .data_out_num = SPEAKER_I2S_DO,
                                  .data_in_num = I2S_PIN_NO_CHANGE};
 
   i2s_driver_uninstall(AUDIO_OUT);
