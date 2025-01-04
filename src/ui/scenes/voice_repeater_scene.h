@@ -6,11 +6,11 @@
 #include "audio/audio_recorder.h"
 #include "wifi/wifi_connection.h"
 
-LV_IMAGE_DECLARE(microphone);
+LV_IMAGE_DECLARE(img_microphone);
 
 #define BUTTON_BG_COLOR rgb(0xFF2C55)
-// #define SCENE_BG_COLOR rgb(0x000000)
-#define SCENE_BG_COLOR rgb(0x282e6c)
+#define SCENE_BG_COLOR rgb(0x000000)
+// #define SCENE_BG_COLOR rgb(0x282e6c)
 
 static lv_style_t bigRingPressedStyle;
 static lv_style_t midRingPressedStyle;
@@ -37,14 +37,14 @@ class VoiceRepeaterScene : public MXScene {
     root()->bg(SCENE_BG_COLOR).scrollable(false);
 
     titleLabel =
-        &root()->label("VoiceRepeater", MX_FONT_SIZE_XL).center_x(0, 42);
+        &root()->label("VoiceRepeater", MX_FONT_SIZE_XL).center_x(0, 46);
     instructionLabel = &root()
                             ->label()
                             .text(INSTRUCTION_TEXT)
                             .text(MX_FONT_SIZE_SM)
                             .text_secondary()
                             .text_center()
-                            .center_x(0, 92);
+                            .center_x(0, 82);
 
     bigRing = &root()
                    ->object()
@@ -86,7 +86,7 @@ class VoiceRepeaterScene : public MXScene {
                          audioRecorder->play();
                          Audio.playSystemSound(SYSTEM_SOUND_LOWER_BEEP);
                        });
-    speakButton->image(&microphone).center(0).clickable(false);
+    speakButton->image(&img_microphone).center(0).clickable(false);
 
     init_pressed_style(&bigRingPressedStyle, 40);
     init_pressed_style(&midRingPressedStyle, 16);
