@@ -8,17 +8,17 @@
 #include "setup/lv_setup.h"
 
 // Scenes
-#include "ui/scenes/main_scene.h"
+#include "ui/scenes/voice_repeater_scene.h"
 #include "ui/scenes/wifi_connection_scene.h"
 
-MainScene mainScene;
+VoiceRepeaterScene voiceRepeaterScene;
 WiFiConnectionScene wifiConnectionScene;
 
 void lv_init_ui() {
   // wifiConnectionScene.begin();
   // wifiConnectionScene.show(LV_SCR_LOAD_ANIM_NONE);
-  mainScene.begin();
-  mainScene.show();
+  voiceRepeaterScene.begin();
+  voiceRepeaterScene.show();
 }
 
 void setup() {

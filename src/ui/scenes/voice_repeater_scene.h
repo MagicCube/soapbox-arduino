@@ -8,15 +8,17 @@
 
 LV_IMAGE_DECLARE(microphone);
 
-#define BUTTON_COLOR rgb(0xFF2C55)
-#define BG_COLOR rgb(0x000000)
+#define BUTTON_BG_COLOR rgb(0xFF2C55)
+#define SCENE_BG_COLOR rgb(0x000000)
 // #define BG_COLOR rgb(0x522069)
 
 static lv_style_t bigRingPressedStyle;
 static lv_style_t midRingPressedStyle;
 
-class MainScene : public MXScene {
+class VoiceRepeaterScene : public MXScene {
  protected:
+  MXObject* titleLabel;
+  MXObject* instructionLabel;
   MXObject* speakButton;
   MXObject* bigRing;
   MXObject* midRing;
@@ -29,42 +31,56 @@ class MainScene : public MXScene {
     audioRecorder = new AudioRecorder();
     audioRecorder->begin();
 
-    root()->bg(BG_COLOR).scrollable(false);
+    root()->bg(SCENE_BG_COLOR).scrollable(false);
+
+    titleLabel =
+        &root()->label("VoiceRepeater", MX_FONT_SIZE_XL).center_x(0, 42);
+    instructionLabel =
+        &root()
+             ->label()
+             .text("Press and hold to record.\nRelease to stop and play.")
+             .text(MX_FONT_SIZE_SM)
+             .text_secondary()
+             .text_center()
+             .center_x(0, 88);
 
     bigRing = &root()
                    ->object()
                    .size(256)
                    .center(0, 96)
-                   .bg_white(0.1)
+                   .bg(BUTTON_BG_COLOR, 0.11)
                    .rounded_full()
                    .clickable(false);
     midRing = &bigRing->object()
                    .size(200)
                    .center()
-                   .bg_white(0.1)
+                   .bg(BUTTON_BG_COLOR, 0.11)
                    .rounded_full()
                    .clickable(false);
     speakButton = &bigRing->button()
                        .size(144)
                        .center()
-                       .bg(BUTTON_COLOR)
+                       .bg(BUTTON_BG_COLOR)
                        .rounded_full()
                        .onClick([](MXEvent* e) { Serial.println("Clicked"); })
                        .onPressed([this](MXEvent* e) {
+                         titleLabel->hide();
+                         instructionLabel->hide();
+
                          bigRing->add_style(&bigRingPressedStyle);
-                         bigRing->bg_opacity(0.05);
                          midRing->add_style(&midRingPressedStyle);
-                         midRing->bg_opacity(0.05);
+
                          Audio.playSystemSound(SYSTEM_SOUND_HIGHER_BEEP);
-                         audioRecorder->startRecording();
+                         audioRecorder->record();
                        })
                        .onReleased([this](MXEvent* e) {
+                         titleLabel->show();
+                         instructionLabel->show();
+
                          bigRing->remove_style(&bigRingPressedStyle);
-                         bigRing->bg_opacity(0.1);
                          midRing->remove_style(&midRingPressedStyle);
-                         midRing->bg_opacity(0.1);
+
                          Audio.playSystemSound(SYSTEM_SOUND_LOWER_BEEP);
-                         audioRecorder->stopRecording();
                          audioRecorder->play();
                          Audio.playSystemSound(SYSTEM_SOUND_LOWER_BEEP);
                        });
@@ -88,6 +104,10 @@ class MainScene : public MXScene {
   inline void dispose() override {
     MXScene::dispose();
 
+    delete titleLabel;
+    titleLabel = nullptr;
+    delete instructionLabel;
+    instructionLabel = nullptr;
     delete bigRing;
     bigRing = nullptr;
     delete midRing;
