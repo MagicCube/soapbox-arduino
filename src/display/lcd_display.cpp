@@ -1,8 +1,12 @@
 #include "lcd_display.h"
 
+#include "display_conf.h"
+#include "drivers/display_backlight_driver.h"
+#include "drivers/display_st77916_driver.h"
+
 void LCDDisplay::begin() {
-  lcd = st77916_init_lcd();
-  backlight = st77916_init_backlight();
+  lcd = display_init();
+  backlight = display_backlight_init();
 }
 
 uint16_t LCDDisplay::width() const { return DISPLAY_RES_WIDTH; }

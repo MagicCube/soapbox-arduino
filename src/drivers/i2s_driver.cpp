@@ -1,5 +1,11 @@
 #include "i2s_driver.h"
 
+#include <Arduino.h>
+#include <driver/i2s.h>
+
+#include "audio_conf.h"
+#include "pin_conf.h"
+
 void i2s_init_audio_out() {
   i2s_config_t i2s_config = {
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),

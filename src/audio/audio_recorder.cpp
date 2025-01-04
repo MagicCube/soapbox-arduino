@@ -1,5 +1,7 @@
 #include "audio_recorder.h"
 
+#include "audio_conf.h"
+
 void AudioRecorder::begin() {
   buffer = new CircularBuffer(AUDIO_IN_FRAME_SIZE * AUDIO_IN_FPS * 5);
 }

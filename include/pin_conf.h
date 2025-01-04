@@ -1,6 +1,7 @@
 #pragma once
 
-#define TFT_BLK 15
+#define DISPLAY_BACKLIGHT_PIN 15
+
 #define TFT_RST 47
 #define TFT_CS 10
 #define TFT_SCK 9
@@ -14,12 +15,12 @@
 #define TOUCH_PIN_NUM_INT 41
 #define TOUCH_PIN_NUM_RST 40
 
-#define SD_MMC_D0_PIN 2
-#define SD_MMC_D1_PIN 1
-#define SD_MMC_D2_PIN 6
-#define SD_MMC_D3_PIN 5
-#define SD_MMC_CLK_PIN 3
-#define SD_MMC_CMD_PIN 4
+#define SD_MMC_D0 2
+#define SD_MMC_D1 1
+#define SD_MMC_D2 6
+#define SD_MMC_D3 5
+#define SD_MMC_CLK 3
+#define SD_MMC_CMD 4
 
 #define SPEAKER_I2S_MCK_IO -1  // MCK
 #define SPEAKER_I2S_BCK_IO 18  // BCK

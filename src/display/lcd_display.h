@@ -4,9 +4,6 @@
 #include <ESP_IOExpander.h>
 #include <ESP_Panel_Library.h>
 
-#include "drivers/cst816s_touch_driver.h"
-#include "drivers/st77916_display_driver.h"
-
 class LCDDisplay {
  public:
   void begin();
@@ -27,6 +24,6 @@ class LCDDisplay {
                   const uint32_t width, const uint32_t height) const;
 
  protected:
-  ESP_PanelLcd_ST77916* lcd = nullptr;
+  ESP_PanelLcd* lcd = nullptr;
   ESP_PanelBacklight* backlight = nullptr;
 };

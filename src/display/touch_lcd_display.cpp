@@ -1,9 +1,12 @@
 #include "touch_lcd_display.h"
 
+#include "display_conf.h"
+#include "drivers/touch_cst816s_driver.h"
+
 void TouchLCDDisplay::begin() {
   LCDDisplay::begin();
 
-  touch = cst816s_init_touch();
+  touch = touch_init();
 }
 
 void TouchLCDDisplay::rotate(const uint16_t degree) {

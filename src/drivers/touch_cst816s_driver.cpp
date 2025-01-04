@@ -1,6 +1,13 @@
-#include "cst816s_touch_driver.h"
+#include "touch_cst816s_driver.h"
 
-ESP_PanelTouch_CST816S* cst816s_init_touch() {
+#include <Arduino.h>
+#include <ESP_IOExpander.h>
+#include <ESP_Panel_Library.h>
+
+#include "display_conf.h"
+#include "pin_conf.h"
+
+ESP_PanelTouch* touch_init() {
   ESP_PanelBus_I2C* bus =
       new ESP_PanelBus_I2C(TOUCH_PIN_NUM_I2C_SCL, TOUCH_PIN_NUM_I2C_SDA,
                            ESP_LCD_TOUCH_IO_I2C_CST816S_CONFIG());

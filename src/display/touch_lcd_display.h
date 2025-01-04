@@ -2,7 +2,6 @@
 
 #include <lvgl.h>
 
-#include "drivers/cst816s_touch_driver.h"
 #include "lcd_display.h"
 
 class TouchLCDDisplay : public LCDDisplay {
@@ -15,5 +14,5 @@ class TouchLCDDisplay : public LCDDisplay {
                       const size_t num_points) const;
 
  protected:
-  ESP_PanelTouch_CST816S* touch = nullptr;
+  ESP_PanelTouch* touch = nullptr;
 };

@@ -1,12 +1,17 @@
-#include "st77916_display_driver.h"
+#include "display_st77916_driver.h"
 
 #include <Arduino.h>
+#include <ESP_IOExpander.h>
+#include <ESP_Panel_Library.h>
+
+#include "display_conf.h"
+#include "pin_conf.h"
 
 #define TFT_SPI_FREQ_HZ (50 * 1000 * 1000)
 
-void st77916_clear(ESP_PanelLcd_ST77916* lcd);
+void display_clear(ESP_PanelLcd* display);
 
-ESP_PanelLcd_ST77916* st77916_init_lcd() {
+ESP_PanelLcd* display_init() {
   // Bus
   ESP_PanelBus_QSPI* bus = new ESP_PanelBus_QSPI(TFT_CS, TFT_SCK, TFT_SDA0,
                                                  TFT_SDA1, TFT_SDA2, TFT_SDA3);
@@ -21,35 +26,11 @@ ESP_PanelLcd_ST77916* st77916_init_lcd() {
   lcd->begin();
   lcd->invertColor(true);
   lcd->displayOn();
-  st77916_clear(lcd);
+  display_clear(lcd);
   return lcd;
 }
 
-ESP_PanelBacklight* st77916_init_backlight() {
-  ledc_timer_config_t ledc_timer = {.speed_mode = LEDC_LOW_SPEED_MODE,
-                                    .duty_resolution = LEDC_TIMER_13_BIT,
-                                    .timer_num = LEDC_TIMER_0,
-                                    .freq_hz = 5000,
-                                    .clk_cfg = LEDC_AUTO_CLK};
-  ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
-
-  ledc_channel_config_t ledc_channel = {.gpio_num = (TFT_BLK),
-                                        .speed_mode = LEDC_LOW_SPEED_MODE,
-                                        .channel = LEDC_CHANNEL_0,
-                                        .intr_type = LEDC_INTR_DISABLE,
-                                        .timer_sel = LEDC_TIMER_0,
-                                        .duty = 0,
-                                        .hpoint = 0};
-  ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel));
-
-  auto backlight = new ESP_PanelBacklight(ledc_timer, ledc_channel);
-  backlight->begin();
-  backlight->off();
-  backlight->on();
-  return backlight;
-}
-
-bool st77916_draw_bitmap(ESP_PanelLcd_ST77916* lcd, const uint8_t* bitmap) {
+bool display_draw_bitmap(ESP_PanelLcd* lcd, const uint8_t* bitmap) {
   uint8_t* buffer = nullptr;
 
   try {
@@ -75,7 +56,7 @@ bool st77916_draw_bitmap(ESP_PanelLcd_ST77916* lcd, const uint8_t* bitmap) {
   return true;
 }
 
-void st77916_clear(ESP_PanelLcd_ST77916* lcd) {
+void display_clear(ESP_PanelLcd* display) {
   int bytes_per_pixel = DISPLAY_COLOR_BITS / 8;
   uint8_t* color_buf = nullptr;
 
@@ -95,7 +76,8 @@ void st77916_clear(ESP_PanelLcd_ST77916* lcd) {
   // Draw the color across the entire screen
   bool ret = true;
   for (int j = 0; j < DISPLAY_RES_HEIGHT; j++) {
-    ret = lcd->drawBitmapWaitUntilFinish(0, j, DISPLAY_RES_WIDTH, 1, color_buf);
+    ret = display->drawBitmapWaitUntilFinish(0, j, DISPLAY_RES_WIDTH, 1,
+                                             color_buf);
     if (!ret) {
       break;
     }

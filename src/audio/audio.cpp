@@ -1,5 +1,9 @@
 #include "audio.h"
 
+#include "audio_conf.h"
+#include "drivers/i2s_driver.h"
+#include "notes.h"
+
 I2SAudio Audio;
 
 void I2SAudio::begin() {

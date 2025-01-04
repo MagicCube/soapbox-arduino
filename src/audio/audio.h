@@ -2,9 +2,6 @@
 
 #include <Arduino.h>
 
-#include "drivers/i2s_driver.h"
-#include "notes.h"
-
 enum SystemSound {
   SYSTEM_SOUND_HIGHER_BEEP,
   SYSTEM_SOUND_LOWER_BEEP,
