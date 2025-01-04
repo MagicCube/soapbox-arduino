@@ -9,8 +9,7 @@ void I2SAudio::begin() {
 #if defined(SPEAKER_MUTE_PIN)
   pinMode(SPEAKER_MUTE_PIN, OUTPUT);
 #endif
-  i2s_init_audio_out();
-  i2s_init_audio_in();
+  audio_init();
   unmute();
 }
 
