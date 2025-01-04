@@ -5,12 +5,15 @@
 #include <mx.h>
 
 #include "audio/audio.h"
+#include "display/touch_lcd_display.h"
 #include "setup/lv_setup.h"
 
 // Scenes
 #include "ui/scenes/main_scene.h"
 #include "ui/scenes/voice_repeater_scene.h"
 #include "ui/scenes/wifi_connection_scene.h"
+
+TouchLCDDisplay Display;
 
 MainScene mainScene;
 // VoiceRepeaterScene voiceRepeaterScene;
