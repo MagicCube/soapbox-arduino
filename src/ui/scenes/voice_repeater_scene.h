@@ -9,11 +9,14 @@
 LV_IMAGE_DECLARE(microphone);
 
 #define BUTTON_BG_COLOR rgb(0xFF2C55)
-#define SCENE_BG_COLOR rgb(0x000000)
-// #define BG_COLOR rgb(0x522069)
+// #define SCENE_BG_COLOR rgb(0x000000)
+#define SCENE_BG_COLOR rgb(0x282e6c)
 
 static lv_style_t bigRingPressedStyle;
 static lv_style_t midRingPressedStyle;
+
+const char* INSTRUCTION_TEXT =
+    "Press and hold to record.\nRelease to stop and play.";
 
 class VoiceRepeaterScene : public MXScene {
  protected:
@@ -35,26 +38,25 @@ class VoiceRepeaterScene : public MXScene {
 
     titleLabel =
         &root()->label("VoiceRepeater", MX_FONT_SIZE_XL).center_x(0, 42);
-    instructionLabel =
-        &root()
-             ->label()
-             .text("Press and hold to record.\nRelease to stop and play.")
-             .text(MX_FONT_SIZE_SM)
-             .text_secondary()
-             .text_center()
-             .center_x(0, 88);
+    instructionLabel = &root()
+                            ->label()
+                            .text(INSTRUCTION_TEXT)
+                            .text(MX_FONT_SIZE_SM)
+                            .text_secondary()
+                            .text_center()
+                            .center_x(0, 92);
 
     bigRing = &root()
                    ->object()
                    .size(256)
                    .center(0, 96)
-                   .bg(BUTTON_BG_COLOR, 0.11)
+                   .bg(BUTTON_BG_COLOR, 0.15)
                    .rounded_full()
                    .clickable(false);
     midRing = &bigRing->object()
                    .size(200)
                    .center()
-                   .bg(BUTTON_BG_COLOR, 0.11)
+                   .bg(BUTTON_BG_COLOR, 0.15)
                    .rounded_full()
                    .clickable(false);
     speakButton = &bigRing->button()
@@ -64,8 +66,9 @@ class VoiceRepeaterScene : public MXScene {
                        .rounded_full()
                        .onClick([](MXEvent* e) { Serial.println("Clicked"); })
                        .onPressed([this](MXEvent* e) {
-                         titleLabel->hide();
-                         instructionLabel->hide();
+                         instructionLabel->text(
+                             "Recording...\n"
+                             "Release to stop and play.");
 
                          bigRing->add_style(&bigRingPressedStyle);
                          midRing->add_style(&midRingPressedStyle);
@@ -74,8 +77,7 @@ class VoiceRepeaterScene : public MXScene {
                          audioRecorder->record();
                        })
                        .onReleased([this](MXEvent* e) {
-                         titleLabel->show();
-                         instructionLabel->show();
+                         instructionLabel->text(INSTRUCTION_TEXT);
 
                          bigRing->remove_style(&bigRingPressedStyle);
                          midRing->remove_style(&midRingPressedStyle);
