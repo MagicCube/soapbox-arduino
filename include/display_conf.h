@@ -1,9 +1,5 @@
-#pragma once
-
-#define DISPLAY_ST77916
-#define DISPLAY_COLOR_BITS 16
-#define DISPLAY_RES_WIDTH 360
-#define DISPLAY_RES_HEIGHT 360
-#define DISPLAY_OFFSET_X 0
-#define DISPLAY_OFFSET_Y 0
-#define DISPLAY_TOUCH_ENABLED 1
+#if DEVICE_TYPE == kevin_s3_sp_v3
+#include "devices/kevin_s3_sp_v3/display_conf.h"
+#elif DEVICE_TYPE == jc3636w518c
+#include "devices/jc3636w518c/display_conf.h"
+#endif
