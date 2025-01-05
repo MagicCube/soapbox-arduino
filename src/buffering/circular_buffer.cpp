@@ -29,7 +29,7 @@ size_t CircularBuffer::write(const uint8_t* data, size_t length) {
     _writeIndex = secondPart;
   }
 
-  _count += bytesToWrite;
+  _available += bytesToWrite;
   return bytesToWrite;
 }
 
@@ -39,7 +39,7 @@ size_t CircularBuffer::read(uint8_t* data, size_t length) {
     return 0;
   }
 
-  size_t bytesToRead = length > _count ? _count : length;
+  size_t bytesToRead = length > _available ? _available : length;
 
   // 分两部分读取，处理环形缓冲区的边界
   size_t firstPart =
@@ -53,20 +53,20 @@ size_t CircularBuffer::read(uint8_t* data, size_t length) {
     _readIndex = secondPart;
   }
 
-  _count -= bytesToRead;
+  _available -= bytesToRead;
   return bytesToRead;
 }
 
-bool CircularBuffer::isFull() const { return _count == _size; }
+bool CircularBuffer::isFull() const { return _available == _size; }
 
-bool CircularBuffer::isEmpty() const { return _count == 0; }
+bool CircularBuffer::isEmpty() const { return _available == 0; }
 
-size_t CircularBuffer::freeSpace() const { return _size - _count; }
+size_t CircularBuffer::freeSpace() const { return _size - _available; }
 
-size_t CircularBuffer::count() const { return _count; }
+size_t CircularBuffer::available() const { return _available; }
 
 void CircularBuffer::clear() {
   _writeIndex = 0;
   _readIndex = 0;
-  _count = 0;
+  _available = 0;
 }

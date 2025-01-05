@@ -8,7 +8,7 @@ class CircularBuffer {
   size_t _size = 0;            // Buffer size
   size_t _writeIndex = 0;      // Write index
   size_t _readIndex = 0;       // Read index
-  size_t _count = 0;           // Current buffer data
+  size_t _available = 0;       // Current buffer data
 
  public:
   CircularBuffer(size_t size);
@@ -19,6 +19,6 @@ class CircularBuffer {
   bool isFull() const;
   bool isEmpty() const;
   size_t freeSpace() const;
-  size_t count() const;
+  size_t available() const;
   void clear();
 };
