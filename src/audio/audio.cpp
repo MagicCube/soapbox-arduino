@@ -1,6 +1,7 @@
 #include "audio.h"
 
 #include "drivers/audio_i2s_driver.h"
+#include "pin_conf.h"
 
 I2SAudio Audio;
 
