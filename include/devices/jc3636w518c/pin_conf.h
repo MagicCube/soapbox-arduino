@@ -23,12 +23,11 @@
 #define SD_MMC_CLK 3
 #define SD_MMC_CMD 4
 
-#define SPEAKER_I2S_MCK -1   // MCK
 #define SPEAKER_I2S_BCK 18   // BCK
 #define SPEAKER_I2S_WS 16    // LCK
 #define SPEAKER_I2S_DO 17    // DIN
 #define SPEAKER_MUTE_PIN 48  // 低电平静音
 
+#define MIC_I2S_SCK 42
 #define MIC_I2S_WS 45
 #define MIC_I2S_SD 46
-#define MIC_I2S_SCK 42

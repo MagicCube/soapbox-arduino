@@ -17,11 +17,10 @@
 #define SD_MMC_CLK 39
 #define SD_MMC_CMD 38
 
-#define SPEAKER_I2S_MCK -1
 #define SPEAKER_I2S_BCK 46
 #define SPEAKER_I2S_WS 1
 #define SPEAKER_I2S_DO 3
 
+#define MIC_I2S_SCK 41
 #define MIC_I2S_WS 42
 #define MIC_I2S_SD 2
-#define MIC_I2S_SCK 41
