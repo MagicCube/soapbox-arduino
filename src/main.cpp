@@ -10,11 +10,9 @@
 
 // Scenes
 #include "ui/scenes/main_scene.h"
-#include "ui/scenes/voice_repeater_scene.h"
 #include "ui/scenes/wifi_connection_scene.h"
 
 MainScene mainScene;
-// VoiceRepeaterScene voiceRepeaterScene;
 // WiFiConnectionScene wifiConnectionScene;
 
 void lv_init_ui() {
@@ -31,7 +29,9 @@ void setup() {
   Audio.playSystemSound(SYSTEM_SOUND_STARTUP);
 
   Display.begin();
+#ifdef DISPLAY_ST77916
   Display.rotate(180);
+#endif
 
   lv_setup();
   lv_init_ui();
