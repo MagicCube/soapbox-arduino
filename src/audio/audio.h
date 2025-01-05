@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
+#include <ESP_I2S.h>
 
+#include "audio_conf.h"
 #include "notes.h"
 
 enum SystemSound {
@@ -19,13 +21,20 @@ class I2SAudio {
 
   void unmute() const;
 
-  size_t write(int16_t* data, size_t length) const;
-  size_t read(int16_t* data, size_t length) const;
+  inline I2SClass* out() { return _out; }
+  inline I2SClass* in() { return _in; }
+
+  inline size_t write(uint8_t* data, size_t length) const;
+  inline size_t read(int16_t* data, size_t length) const;
 
   void buzz(const float_t frequency, const float_t duration,
             const uint8_t volume = 100) const;
 
   void playSystemSound(const SystemSound sound, const uint8_t volume = 5) const;
+
+ private:
+  I2SClass* _out;
+  I2SClass* _in;
 };
 
 extern I2SAudio Audio;

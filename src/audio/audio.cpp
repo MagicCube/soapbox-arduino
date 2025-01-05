@@ -1,6 +1,5 @@
 #include "audio.h"
 
-#include "audio_conf.h"
 #include "drivers/audio_i2s_driver.h"
 
 I2SAudio Audio;
@@ -9,7 +8,8 @@ void I2SAudio::begin() {
 #if defined(SPEAKER_MUTE_PIN)
   pinMode(SPEAKER_MUTE_PIN, OUTPUT);
 #endif
-  audio_init();
+  _out = audio_out_init();
+  _in = audio_in_init();
   unmute();
 }
 
@@ -28,23 +28,16 @@ void I2SAudio::unmute() const {
 const float_t MAX_AMPLITUDE = 32767;
 void I2SAudio::buzz(const float_t frequency, const float_t duration,
                     const uint8_t volume) const {
-  const int samples = AUDIO_OUT_SAMPLE_RATE * duration;
-  const uint16_t bufferSize = samples * sizeof(int16_t) * AUDIO_OUT_CHANNELS;
-  int16_t buffer[bufferSize / sizeof(int16_t)];
-  const float_t amplitude = MAX_AMPLITUDE * volume / 100;
-
-  for (int i = 0; i < samples; i++) {
-    int16_t pcmValue = (int16_t)(amplitude * sin(2 * PI * frequency * i /
-                                                 AUDIO_OUT_SAMPLE_RATE));
-    if (AUDIO_OUT_CHANNELS == 1) {
-      buffer[i] = pcmValue;
-    } else if (AUDIO_OUT_CHANNELS == 2) {
-      buffer[2 * i] = pcmValue;
-      buffer[2 * i + 1] = pcmValue;
-    }
+  int16_t amplitude = (MAX_AMPLITUDE * volume) / 100;
+  uint32_t totalSamples = AUDIO_OUT_SAMPLE_RATE * duration;
+  float_t angularFrequency = 2.0f * M_PI * frequency / AUDIO_OUT_SAMPLE_RATE;
+  int16_t* buffer = new int16_t[totalSamples];
+  for (uint32_t i = 0; i < totalSamples; i++) {
+    buffer[i] = amplitude * sin(angularFrequency * i);
   }
-
-  write(buffer, bufferSize);
+  _out->write(reinterpret_cast<uint8_t*>(buffer),
+              totalSamples * sizeof(int16_t));
+  delete[] buffer;
 }
 
 void I2SAudio::playSystemSound(const SystemSound sound,
@@ -74,16 +67,4 @@ void I2SAudio::playSystemSound(const SystemSound sound,
     default:
       break;
   }
-}
-
-size_t I2SAudio::write(int16_t* data, size_t length) const {
-  size_t bytesWritten;
-  i2s_write(AUDIO_OUT, data, length, &bytesWritten, portMAX_DELAY);
-  return bytesWritten;
-}
-
-size_t I2SAudio::read(int16_t* data, size_t length) const {
-  size_t bytesRead;
-  i2s_read(AUDIO_IN, data, length, &bytesRead, portMAX_DELAY);
-  return bytesRead;
 }

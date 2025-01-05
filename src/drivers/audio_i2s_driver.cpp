@@ -1,63 +1,57 @@
 #include "audio_i2s_driver.h"
 
 #include <Arduino.h>
-#include <driver/i2s.h>
+#include <ESP_I2S.h>
 
 #include "audio_conf.h"
 #include "pin_conf.h"
 
-void i2s_audio_in_init() {
-  i2s_config_t i2s_config = {
-      .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
-      .sample_rate = AUDIO_IN_SAMPLE_RATE,
-      .bits_per_sample = AUDIO_IN_BITS_PER_SAMPLE == 8
-                             ? I2S_BITS_PER_SAMPLE_8BIT
-                             : I2S_BITS_PER_SAMPLE_16BIT,
-      .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
-      .communication_format = I2S_COMM_FORMAT_STAND_I2S,
-      .intr_alloc_flags = 0,
-      .dma_buf_count = 8,
-      .dma_buf_len = 64,
-      .use_apll = false,
-      .tx_desc_auto_clear = true};
+I2SClass *audio_out_init() {
+  i2s_data_bit_width_t data_bit_width = I2S_DATA_BIT_WIDTH_16BIT;
+  if (AUDIO_OUT_BITS_PER_SAMPLE == 8) {
+    data_bit_width = I2S_DATA_BIT_WIDTH_8BIT;
+  } else if (AUDIO_OUT_BITS_PER_SAMPLE == 16) {
+    data_bit_width = I2S_DATA_BIT_WIDTH_16BIT;
+  } else if (AUDIO_OUT_BITS_PER_SAMPLE == 24) {
+    data_bit_width = I2S_DATA_BIT_WIDTH_24BIT;
+  } else {
+    data_bit_width = I2S_DATA_BIT_WIDTH_32BIT;
+  }
 
-  i2s_pin_config_t pin_config = {.bck_io_num = MIC_I2S_SCK,
-                                 .ws_io_num = MIC_I2S_WS,
-                                 .data_out_num = I2S_PIN_NO_CHANGE,
-                                 .data_in_num = MIC_I2S_SD};
+  i2s_slot_mode_t slot_mode = I2S_SLOT_MODE_MONO;
+  if (AUDIO_OUT_CHANNELS != 1) {
+    slot_mode = I2S_SLOT_MODE_STEREO;
+  }
 
-  i2s_driver_uninstall(AUDIO_IN);
-  i2s_driver_install(AUDIO_IN, &i2s_config, 0, NULL);
-  i2s_set_pin(AUDIO_IN, &pin_config);
+  I2SClass *i2s = new I2SClass();
+  i2s->setPins(SPEAKER_I2S_BCK, SPEAKER_I2S_WS, SPEAKER_I2S_DO);
+  i2s->begin(I2S_MODE_STD, AUDIO_OUT_SAMPLE_RATE, data_bit_width, slot_mode,
+             slot_mode == I2S_SLOT_MODE_STEREO ? I2S_STD_SLOT_BOTH
+                                               : I2S_STD_SLOT_LEFT);
+  return i2s;
 }
 
-void i2s_init_audio_out() {
-  i2s_config_t i2s_config = {
-      .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
-      .sample_rate = AUDIO_OUT_SAMPLE_RATE,
-      .bits_per_sample = AUDIO_OUT_BITS_PER_SAMPLE == 8
-                             ? I2S_BITS_PER_SAMPLE_8BIT
-                             : I2S_BITS_PER_SAMPLE_16BIT,
-      .channel_format = AUDIO_OUT_CHANNELS == 2 ? I2S_CHANNEL_FMT_RIGHT_LEFT
-                                                : I2S_CHANNEL_FMT_ONLY_LEFT,
-      .communication_format = I2S_COMM_FORMAT_STAND_I2S,
-      .intr_alloc_flags = 0,
-      .dma_buf_count = 8,
-      .dma_buf_len = 64,
-      .use_apll = false,
-      .tx_desc_auto_clear = true};
+I2SClass *audio_in_init() {
+  i2s_data_bit_width_t data_bit_width = I2S_DATA_BIT_WIDTH_16BIT;
+  if (AUDIO_IN_BITS_PER_SAMPLE == 8) {
+    data_bit_width = I2S_DATA_BIT_WIDTH_8BIT;
+  } else if (AUDIO_IN_BITS_PER_SAMPLE == 16) {
+    data_bit_width = I2S_DATA_BIT_WIDTH_16BIT;
+  } else if (AUDIO_IN_BITS_PER_SAMPLE == 24) {
+    data_bit_width = I2S_DATA_BIT_WIDTH_24BIT;
+  } else {
+    data_bit_width = I2S_DATA_BIT_WIDTH_32BIT;
+  }
 
-  i2s_pin_config_t pin_config = {.bck_io_num = SPEAKER_I2S_BCK,
-                                 .ws_io_num = SPEAKER_I2S_WS,
-                                 .data_out_num = SPEAKER_I2S_DO,
-                                 .data_in_num = I2S_PIN_NO_CHANGE};
+  i2s_slot_mode_t slot_mode = I2S_SLOT_MODE_MONO;
+  if (AUDIO_IN_CHANNELS != 1) {
+    slot_mode = I2S_SLOT_MODE_STEREO;
+  }
 
-  i2s_driver_uninstall(AUDIO_OUT);
-  i2s_driver_install(AUDIO_OUT, &i2s_config, 0, NULL);
-  i2s_set_pin(AUDIO_OUT, &pin_config);
-}
-
-void audio_init() {
-  i2s_audio_in_init();
-  i2s_init_audio_out();
+  I2SClass *i2s = new I2SClass();
+  i2s->setPins(MIC_I2S_SCK, MIC_I2S_WS, -1, MIC_I2S_SD);
+  i2s->begin(I2S_MODE_STD, AUDIO_IN_SAMPLE_RATE, data_bit_width, slot_mode,
+             slot_mode == I2S_SLOT_MODE_STEREO ? I2S_STD_SLOT_BOTH
+                                               : I2S_STD_SLOT_LEFT);
+  return i2s;
 }
